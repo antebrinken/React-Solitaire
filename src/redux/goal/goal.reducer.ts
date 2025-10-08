@@ -1,11 +1,9 @@
 /* eslint-disable indent */
 import {
-  addCardToGoal,
   addDragginCardsToGoal,
   checkDoubleClickValid,
   checkGoalSwapDoubleClickValid,
   checkMoveFromAnyColumns,
-  removeCardFromGoal,
   setCardDragging,
   swapGoals,
   undoSwapGoals
@@ -16,18 +14,17 @@ import GoalActionTypes from "./goal.types";
 
 export interface InitialGoal {
   goals: {
-    // cards array of each goal
     goal1Pile: Array<CardType>;
     goal2Pile: Array<CardType>;
     goal3Pile: Array<CardType>;
     goal4Pile: Array<CardType>;
   };
-  cardDragging?: Array<CardType>; // cards original from the goals that are being dragged
-  cardDraggingGoal?: string; // id of the cards dragging's goal
-  sendBack?: boolean; // flag that announces if the movement to the goal, was invalid
+  cardDragging?: Array<CardType>;
+  cardDraggingGoal?: string;
+  sendBack?: boolean;
   doubleClickTarget?: boolean | string;
   hintSource?: boolean | string;
-  gameOver: boolean; // flag to announce when the game has ended
+  gameOver: boolean;
 }
 
 const INITIAL_GOAL: InitialGoal = {
@@ -45,35 +42,60 @@ const INITIAL_GOAL: InitialGoal = {
   gameOver: false
 };
 
+// -----------------------------------
+// Hjälpfunktioner för immutabla uppdateringar
+// -----------------------------------
+
+// Ta bort kort från goal pile immutabelt
+function removeCardFromGoalImmutable(
+  goals: Record<string, CardType[]>,
+  goalId: string,
+  cardToRemove: CardType
+) {
+  return {
+    goals: {
+      ...goals,
+      [goalId]: goals[goalId].filter(card => card.id !== cardToRemove.id)
+    }
+  };
+}
+
+// Lägg till kort i goal pile immutabelt
+function addCardToGoalImmutable(
+  goals: Record<string, CardType[]>,
+  goalId: string,
+  cardToAdd: CardType
+) {
+  return {
+    goals: {
+      ...goals,
+      [goalId]: [...goals[goalId], cardToAdd]
+    }
+  };
+}
+
+// -----------------------------------
+// Reducer
+// -----------------------------------
 const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
   switch (action.type) {
-    // ********************************************************
-    // INITIAL SETTINGS ACTIONS
-
-    /**
-     * Stores the initial goals in the Redux State:
-     *    - stores the goal object created at createGoals function
-     *    - resets cardDragging, cardDraggingCol and sendBack;
-     */
+    // ------------------------
+    // Initial settings
+    // ------------------------
     case GoalActionTypes.SET_INITIAL_GOALS:
       return {
         goals: action.goals,
         cardDragging: undefined,
-        cardDraggingCol: undefined,
+        cardDraggingGoal: undefined,
         sendBack: undefined,
         doubleClickTarget: undefined,
         hintSource: undefined,
         gameOver: false
       };
 
-    // ********************************************************
-    // SWAPPING ACTIONS
-
-    /**
-     * Swap 1 card from one goal to the other
-     *    - saves the changes in the initialGoal and finalGoal;
-     *    - if the movement is not valid, then sendBack is set to true, if not, to false;
-     */
+    // ------------------------
+    // Swap actions
+    // ------------------------
     case GoalActionTypes.SWAP_GOALS:
       const swapResult = swapGoals(
         state.goals,
@@ -83,10 +105,6 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
       );
       return { ...state, ...swapResult };
 
-    /**
-     * Undo swap of goals, sends back 1 from the target goal to the source goal
-     *    - save the changes done at the source and target goals
-     */
     case GoalActionTypes.UNSWAP_GOALS:
       const unswapResult = undoSwapGoals(
         state.goals,
@@ -95,90 +113,49 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
       );
       return { ...state, ...unswapResult };
 
-    // ********************************************************
-    // DRAGGING ACTIONS
-
-    /**
-     * Starts dragging 1 card and saves its initial goal id
-     *    - gets the cards that are being dragged from the goal and save it in the cardsDragging state;
-     *    - save the id of the goal in the cardsDraggingGoal state;
-     */
+    // ------------------------
+    // Dragging actions
+    // ------------------------
     case GoalActionTypes.DRAG_GOAL_CARDS:
       const draggingResult = setCardDragging(state.goals, action.goalId);
-      return {
-        ...state,
-        ...draggingResult
-      };
+      return { ...state, ...draggingResult };
 
-    /**
-     * Adds the cards that were being dragged to the selected goal
-     *    - if the movement was valid, then:
-     *        - add the cards to the corresponding goal pile;
-     *        - sets sendBack to false;
-     *        - resets cardsDragging;
-     *    - if the movement was invalid, then simply set the sendBack value to true;
-     */
     case GoalActionTypes.ADD_DRAGGING_CARDS_TO_GOAL:
-      const addResult = addDragginCardsToGoal(
+      const addDragResult = addDragginCardsToGoal(
         state.goals,
         action.finalId,
         action.cardDragging
       );
-      return {
-        ...state,
-        ...addResult
-      };
+      return { ...state, ...addDragResult };
 
-    /**
-     * Resets the currently saved card that was being dragged and its initial goal id
-     */
     case GoalActionTypes.RESET_GOAL_CARD_DRAGGING:
       return {
         ...state,
         sendBack: undefined,
-        cardsDragging: undefined,
+        cardDragging: undefined,
         cardDraggingGoal: undefined,
         doubleClickTarget: !state.doubleClickTarget,
         gameOver: false
       };
 
-    // ********************************************************
-    // REMOVE/ADD CARDS ACTIONS
-
-    /**
-     * Sends a card to a goal pile
-     *    - adds the card to the correspoding goal
-     */
+    // ------------------------
+    // Remove/Add cards immutably
+    // ------------------------
     case GoalActionTypes.ADD_CARD_TO_GOAL:
-      const sendUndoResult = addCardToGoal(
-        state.goals,
-        action.goalId,
-        action.card
-      );
       return {
         ...state,
-        ...sendUndoResult
+        ...addCardToGoalImmutable(state.goals, action.goalId, action.card)
       };
 
-    /**
-     * Removes 1 card from a goal pile
-     */
     case GoalActionTypes.REMOVE_CARD_FROM_GOAL:
-      const removeCardResult = removeCardFromGoal(state.goals, action.goalId);
       return {
         ...state,
-        ...removeCardResult
+        ...removeCardFromGoalImmutable(state.goals, action.goalId, action.card)
       };
 
-    // ********************************************************
-    // DOUBLE CLICK ACTIONS
-
-    /**
-     * Checks if there is a goal pile a card from another type of pile can be moved to
-     *    - check if there is any valid spot
-     *    - save the target goal id result
-     *    - if there were no possible moves, the target result works as a flag
-     */
+    // ------------------------
+    // Double-click actions
+    // ------------------------
     case GoalActionTypes.CHECK_DOUBLE_CLICK_VALID:
       const checkDoubleClickResult = checkDoubleClickValid(
         state.goals,
@@ -187,13 +164,6 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
       );
       return { ...state, ...checkDoubleClickResult };
 
-    /**
-     * Checks if there is a goal pile a goal pile card can be moved to:
-     *    - check if there is any valid spot
-     *    - if there is a possible move, then swap the cards
-     *    - save the target goal id result, the cards that were swapped and the swapping result
-     *    - if there were no possible moves, the target result works as a flag
-     */
     case GoalActionTypes.CHECK_GOAL_SWAP_DOUBLE_CLICK_VALID:
       const checkGoalSwapDoubleClickResult = checkGoalSwapDoubleClickValid(
         state.goals,
@@ -201,7 +171,6 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
         action.card,
         state.doubleClickTarget
       );
-
       return { ...state, ...checkGoalSwapDoubleClickResult };
 
     case GoalActionTypes.CHECK_MOVE_FROM_ANY_COLUMN:
@@ -212,8 +181,6 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
         state.doubleClickTarget
       );
       return { ...state, ...checkMoveFromColumnsResult };
-
-    // ********************************************************
 
     default:
       return state;
