@@ -9,19 +9,27 @@ import { useSelector } from "react-redux";
  */
 function GameColumnWrapper() {
   // get piles from redux
-  const {
-    columns: {
-      column1Pile,
-      column2Pile,
-      column3Pile,
-      column4Pile,
-      column5Pile,
-      column6Pile,
-      column7Pile
+  const { columns } = useSelector(({ Columns }: RootReducerState) => ({
+    columns: Columns.columns || {
+      column1Pile: [],
+      column2Pile: [],
+      column3Pile: [],
+      column4Pile: [],
+      column5Pile: [],
+      column6Pile: [],
+      column7Pile: []
     }
-  } = useSelector(({ Columns }: RootReducerState) => ({
-    columns: Columns.columns
   }));
+
+  const {
+    column1Pile,
+    column2Pile,
+    column3Pile,
+    column4Pile,
+    column5Pile,
+    column6Pile,
+    column7Pile
+  } = columns;
 
   return (
     <Row gutter={6} className="gameColumnsRow" align="middle">

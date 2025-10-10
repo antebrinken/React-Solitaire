@@ -88,9 +88,10 @@ const addCardToGoal = (goalId: string, card: CardType) => ({
  * Removes 1 cards from a goal pile
  * @param goalId id of the column to be reduced of cards
  */
-const removeCardFromGoal = (goalId?: string) => ({
+const removeCardFromGoal = (goalId?: string, card?: CardType) => ({
   type: GoalActionTypes.REMOVE_CARD_FROM_GOAL,
-  goalId
+  goalId,
+  card
 });
 
 // ********************************************************

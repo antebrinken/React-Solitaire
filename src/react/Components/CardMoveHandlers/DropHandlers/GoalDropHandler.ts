@@ -57,6 +57,14 @@ class GoalDrop {
       if (finalMove.source.indexOf("column") === 0) {
         // then remove the card that still is in the column pile and clear cardDragging state
         this.dispatch(columnsActions.removeDraggedCardsFromColumn());
+      } else if (finalMove.cards[0]?.cardField.includes("goal")) {
+        // if the card came from a goal, remove it from the origin goal pile explicitly
+        this.dispatch(
+          goalActions.removeCardFromGoal(
+            finalMove.cards[0]?.cardField,
+            finalMove.cards[0]
+          )
+        );
       }
       // the goal -> goal move is handled at the goal redux
     }

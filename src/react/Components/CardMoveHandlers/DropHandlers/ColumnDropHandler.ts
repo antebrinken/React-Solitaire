@@ -56,7 +56,10 @@ class ColumnDrop {
       if (finalMove.cards[0]?.cardField.includes("goal")) {
         // then remove the card that still is in the goal pile and clear cardDragging state
         this.dispatch(
-          goalActions.removeCardFromGoal(finalMove.cards[0]?.cardField)
+          goalActions.removeCardFromGoal(
+            finalMove.cards[0]?.cardField,
+            finalMove.cards[0]
+          )
         );
       }
       // the column -> column move is handled at the goal redux

@@ -135,23 +135,21 @@ const columnsReducer = (state = INITIAL_COLUMNS, action: ActionsCreators) => {
       return { ...state, ...draggingResult };
 
     case ColumnsActionTypes.ADD_DRAGGING_CARDS_TO_COLUMN:
+      const addDraggingResult = addDragginCardsToColumn(
+        state.columns,
+        action.finalId,
+        action.cardDragging
+      );
       return {
         ...state,
-        columns: addDragginCardsToColumn(
-          state.columns,
-          action.finalId,
-          action.cardDragging
-        )
+        columns: addDraggingResult.columns || state.columns,
+        sendBack: addDraggingResult.sendBack
       };
 
     case ColumnsActionTypes.REMOVE_DRAGGED_CARDS_FROM_COLUMN:
       return {
         ...state,
-        columns: removeDraggedCardImmutable(
-          state.columns,
-          state.cardDraggingCol!,
-          state.cardDragging || []
-        )
+        ...removeDraggedCard(state.columns, state.cardDraggingCol!)
       };
 
     case ColumnsActionTypes.RESET_COLUMN_CARD_DRAGGING:
@@ -167,22 +165,25 @@ const columnsReducer = (state = INITIAL_COLUMNS, action: ActionsCreators) => {
       };
 
     case ColumnsActionTypes.ADD_CARD_TO_COLUMN:
+      const addCardResult = addCardToColumn(
+        state.columns,
+        action.columnId,
+        action.card,
+        action.flip
+      );
       return {
         ...state,
-        columns: addCardToColumnImmutable(
-          state.columns,
-          action.columnId,
-          action.card
-        )
+        ...addCardResult
       };
 
     case ColumnsActionTypes.REMOVE_N_CARDS_FROM_COLUMN:
       return {
         ...state,
-        columns: removeNCardsFromColumnImmutable(
+        ...removeNCardsFromColumn(
           state.columns,
           action.columnId,
-          action.nCards
+          action.nCards,
+          action.flip
         )
       };
 
@@ -217,7 +218,9 @@ const columnsReducer = (state = INITIAL_COLUMNS, action: ActionsCreators) => {
         );
         return {
           ...state,
-          columns: swapColumnsDoubleClick,
+          columns: swapColumnsDoubleClick.columns,
+          sendBack: swapColumnsDoubleClick.sendBack,
+          movementWithFlip: swapColumnsDoubleClick.movementWithFlip,
           doubleClickTarget: undefined,
           movingCards: undefined
         };

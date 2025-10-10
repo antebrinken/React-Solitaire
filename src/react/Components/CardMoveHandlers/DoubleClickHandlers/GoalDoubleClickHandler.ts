@@ -33,7 +33,7 @@ class GoalDoubleClickHandler {
   handleColumnDoubleClickResult(columnMoveTarget?: string | boolean) {
     if (typeof columnMoveTarget === "string") {
       // Flytta kortet från goal till kolumn på ett immutabelt sätt
-      this.dispatch(goalActions.removeCardFromGoal(this.goalId));
+      this.dispatch(goalActions.removeCardFromGoal(this.goalId, this.card));
       this.dispatch(columnsActions.addCardToColumn(columnMoveTarget, this.card, false));
 
       // Lägg till historik för spelet

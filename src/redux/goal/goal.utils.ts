@@ -17,8 +17,8 @@ export const isValidMovement = (firstCard: CardType, finalCard?: CardType) => {
     }
     return false;
   }
-  // if the cards have different colors, then return false
-  if (firstCard.cardSuit.indexOf(finalCard.cardSuit) !== 0) {
+  // require exact same suit for goal piles
+  if (firstCard.cardSuit !== finalCard.cardSuit) {
     return false;
   }
   // if the card being added has a number that is not one value higher, then return false
