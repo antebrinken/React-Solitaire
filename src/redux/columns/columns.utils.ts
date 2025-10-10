@@ -105,7 +105,7 @@ export const swapColumns = (
   // check if the movement respects the rules of the game (compare the first card to add with the last card of the destination column)
   if (isValidMovement(cardsSwapping[0], finalCol[finalCol.length - 1])) {
     // add the swapped cards to the final column
-    cardsSwapping.map((card: CardType) =>
+    cardsSwapping.forEach((card: CardType) =>
       finalCol.push({ ...card, cardField: finalId })
     );
 
@@ -192,7 +192,7 @@ export const undoSwapColumns = (
   }
 
   // add the swapped cards to the final column (make sure that it is flipped)
-  cardsToSwap.map((card: CardType) =>
+  cardsToSwap.forEach((card: CardType) =>
     finalCol.push({ ...card, flipped: true, cardField: finalId })
   );
 
@@ -257,7 +257,7 @@ export const addDragginCardsToColumn = (
   // check if the movement respects the game rules
   if (isValidMovement(cardDragging[0], finalCol[finalCol.length - 1])) {
     // add the swapped cards to the final column
-    cardDragging.map((card: CardType) =>
+    cardDragging.forEach((card: CardType) =>
       finalCol.push({ ...card, flipped: true, cardField: finalId })
     );
 
@@ -359,20 +359,32 @@ export const removeNCardsFromColumn = (
 ) => {
   // create copy of the column
   const tempCol = [...columns[columnId]];
-  // remove the last card
-  tempCol.splice(-nCards, 1);
 
-  // get index of last card
+  // DEBUG: Log what we're doing
+  console.log('removeNCardsFromColumn: Before removal:', tempCol.length, 'cards, nCards:', nCards, 'shouldFlip:', movementWithFlip);
+
+  // remove the last card
+  tempCol.splice(-nCards, nCards);
+
+  // get index of last card (now the top card after removal)
   const lastCard = tempCol.length - 1;
 
-  let finalMovementWithFlip = movementWithFlip;
-  // if the last card has flipped = false, then make it true
+  console.log('removeNCardsFromColumn: After removal:', tempCol.length, 'cards, lastCard index:', lastCard);
+
+  // Only flip if we should flip AND there's a card to flip
   if (lastCard >= 0 && movementWithFlip) {
-    finalMovementWithFlip = tempCol[lastCard].flipped === false;
-    tempCol[lastCard] = {
-      ...tempCol[lastCard],
-      flipped: true
-    };
+    // Check if this card actually needs flipping
+    if (tempCol[lastCard].flipped === false) {
+      console.log('removeNCardsFromColumn: Flipping card at index', lastCard, 'from', tempCol[lastCard].image);
+      tempCol[lastCard] = {
+        ...tempCol[lastCard],
+        flipped: true
+      };
+    } else {
+      console.log('removeNCardsFromColumn: Card at index', lastCard, 'is already flipped');
+    }
+  } else {
+    console.log('removeNCardsFromColumn: No flip needed - lastCard:', lastCard, 'movementWithFlip:', movementWithFlip);
   }
 
   return {
@@ -380,7 +392,7 @@ export const removeNCardsFromColumn = (
       ...columns,
       [columnId]: tempCol
     },
-    movementWithFlip: finalMovementWithFlip
+    movementWithFlip: movementWithFlip
   };
 };
 

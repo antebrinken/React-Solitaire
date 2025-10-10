@@ -61,7 +61,7 @@ export const swapGoals = (
   // check if the movement respects the rules of the game (compare the first card to add with the last card of the destination goal pile)
   if (isValidMovement(cardsSwapping[0], finalGoal[finalGoal.length - 1])) {
     // add the swapped cards to the final goal pile
-    cardsSwapping.map((card: CardType) =>
+    cardsSwapping.forEach((card: CardType) =>
       finalGoal.push({ ...card, cardField: finalId })
     );
 
@@ -77,7 +77,7 @@ export const swapGoals = (
   }
 
   // if the movement was invalid, then put the card back in the initial goal pile
-  cardsSwapping.map((card: CardType) => initialGoal.push(card));
+  cardsSwapping.forEach((card: CardType) => initialGoal.push(card));
 
   // no changes were made in the initial and final goal piles
   // so simply return the send back flag signaling that the movement was not done
@@ -156,7 +156,7 @@ export const addDragginCardsToGoal = (
   // check if the movement respects the game rules
   if (isValidMovement(cardDragging[0], finalGoal[finalGoal.length - 1])) {
     // add the swapped cards to the final goal pile
-    cardDragging.map((card: CardType) =>
+    cardDragging.forEach((card: CardType) =>
       finalGoal.push({ ...card, flipped: true, cardField: finalId })
     );
 

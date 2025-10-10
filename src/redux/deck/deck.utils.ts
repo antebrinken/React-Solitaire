@@ -142,6 +142,6 @@ export const addCardToFlipped = (
   card: CardType
 ) => {
   return {
-    flippedPile: [...flippedPile, { ...card, cardFlipped: "deckPile" }]
+    flippedPile: [...flippedPile, { ...card, flipped: true, cardField: "deckPile" }]
   };
 };
