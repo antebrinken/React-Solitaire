@@ -166,6 +166,18 @@ const deckReducer = (state = INITIAL_DECK, action: ActionsCreators) => {
         flippedPile: tempFlipped
       };
 
+    case DeckActionTypes.REMOVE_SPECIFIC_CARD_FROM_FLIPPED: {
+      const tempFlipped = [...state.flippedPile];
+      const idx = tempFlipped.findIndex(c => c.id === action.card.id);
+      if (idx >= 0) {
+        tempFlipped.splice(idx, 1);
+      }
+      return {
+        ...state,
+        flippedPile: tempFlipped
+      };
+    }
+
     /**
      * Resets the currently saved card that was being dragged
      */

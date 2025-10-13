@@ -7,6 +7,7 @@ import {
   checkMoveFromAnyColumn,
   createColumns,
   removeDraggedCard,
+  removeSpecificCardFromColumn,
   removeNCardsFromColumn,
   setCardDragging,
   swapColumns,
@@ -118,6 +119,16 @@ const columnsReducer = (state = INITIAL_COLUMNS, action: ActionsCreators) => {
       return {
         ...state,
         ...removeDraggedCard(state.columns, state.cardDraggingCol!)
+      };
+
+    case ColumnsActionTypes.REMOVE_SPECIFIC_CARD_FROM_COLUMN:
+      return {
+        ...state,
+        ...removeSpecificCardFromColumn(
+          state.columns,
+          action.columnId,
+          action.card
+        )
       };
 
     case ColumnsActionTypes.RESET_COLUMN_CARD_DRAGGING:

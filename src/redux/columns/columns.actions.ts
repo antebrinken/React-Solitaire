@@ -89,6 +89,15 @@ const removeDraggedCardsFromColumn = () => ({
 });
 
 /**
+ * Removes a specific card (by id) from a column pile
+ */
+const removeSpecificCardFromColumn = (columnId: string, card: CardType) => ({
+  type: ColumnActionTypes.REMOVE_SPECIFIC_CARD_FROM_COLUMN,
+  columnId,
+  card
+});
+
+/**
  * Resets the currently saved card that was been dragge and its initial column id
  */
 const resetCardDragging = () => ({
@@ -179,6 +188,7 @@ const actionsCreators = Object.freeze({
   dragColumnCards,
   addDraggingCardsToColumn,
   removeDraggedCardsFromColumn,
+  removeSpecificCardFromColumn,
   resetCardDragging,
   addCardToColumn,
   removeNCardsFromColumn,

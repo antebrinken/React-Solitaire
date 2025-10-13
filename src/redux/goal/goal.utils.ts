@@ -154,6 +154,11 @@ export const addDragginCardsToGoal = (
   const finalGoal = [...goals[finalId]];
 
   // check if the movement respects the game rules
+  // guard against empty dragging arrays
+  if (!cardDragging || cardDragging.length === 0) {
+    return { sendBack: true };
+  }
+
   if (isValidMovement(cardDragging[0], finalGoal[finalGoal.length - 1])) {
     // add the swapped cards to the final goal pile
     cardDragging.forEach((card: CardType) =>

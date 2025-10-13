@@ -87,6 +87,14 @@ const removeCardFromFlipped = () => ({
 });
 
 /**
+ * After a successful action, remove a specific card (by id) from the flipped pile
+ */
+const removeSpecificCardFromFlipped = (card: CardType) => ({
+  type: DeckActionTypes.REMOVE_SPECIFIC_CARD_FROM_FLIPPED,
+  card
+});
+
+/**
  * Resets the currently saved card that was being dragged
  */
 const resetCardDragging = () => ({
@@ -130,6 +138,7 @@ const actionsCreators = Object.freeze({
   undoResetDeck,
   dragFlippedCard,
   removeCardFromFlipped,
+  removeSpecificCardFromFlipped,
   resetCardDragging,
   startUndoAnimation,
   startRedoAnimation,

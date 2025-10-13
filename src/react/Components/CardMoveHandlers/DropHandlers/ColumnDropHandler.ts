@@ -27,10 +27,12 @@ class ColumnDrop {
     // if the card came from the deck or from a goal
     else {
       // deck -> column | goal -> column
-      // call the goal action that adds the dragging cards to the goal
-      this.dispatch(
-        columnsActions.addDraggingCardsToColumn(fieldDropedToTemp, move.cards)
-      );
+      // only proceed if there are cards to add
+      if (move.cards && move.cards.length > 0) {
+        this.dispatch(
+          columnsActions.addDraggingCardsToColumn(fieldDropedToTemp, move.cards)
+        );
+      }
 
       // then reset the values at the deck redux
       this.dispatch(deckActions.resetCardDragging());
@@ -49,8 +51,8 @@ class ColumnDrop {
   handleRemoveCard(finalMove: GameMove) {
     // if the card came from the deck pile
     if (finalMove.cards[0]?.cardField === "deckPile") {
-      // then remove the card that still is in the flipped pile and clear cardDragging state
-      this.dispatch(deckActions.removeCardFromFlipped());
+      // then remove the specific card that still is in the flipped pile and clear cardDragging state
+      this.dispatch(deckActions.removeSpecificCardFromFlipped(finalMove.cards[0]));
     } else {
       // if the card came from a goal
       if (finalMove.source.includes("goal")) {

@@ -35,8 +35,8 @@ class DeckDoubleClickHandler {
   handleGoalDoubleClickResult(goalMoveTarget?: string | boolean) {
     // if the move to a goal was valid (result is the target goal id)
     if (typeof goalMoveTarget === "string") {
-      // remove card from flipped
-      this.dispatch(deckActions.removeCardFromFlipped());
+      // remove specific card from flipped (avoid races/duplication)
+      this.dispatch(deckActions.removeSpecificCardFromFlipped(this.card));
       // add removed card to the corresponding goal
       this.dispatch(goalActions.addCardToGoal(goalMoveTarget, this.card));
 
@@ -67,8 +67,8 @@ class DeckDoubleClickHandler {
   handleColumnDoubleClickResult(columnMoveTarget?: string) {
     // if the move to a column was valid (result is the target column id) and the card moving field is the same as the columnId
     if (typeof columnMoveTarget === "string") {
-      // remove card from flipped
-      this.dispatch(deckActions.removeCardFromFlipped());
+      // remove specific card from flipped (avoid races/duplication)
+      this.dispatch(deckActions.removeSpecificCardFromFlipped(this.card));
       // add removed card to the corresponding column
       this.dispatch(
         columnsActions.addCardToColumn(columnMoveTarget, this.card, false)

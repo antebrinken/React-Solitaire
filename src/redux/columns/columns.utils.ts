@@ -11,9 +11,9 @@ import { ExplicitAny } from "../../global";
  * @param finalCard final card of the column to add the first card
  */
 export const isValidMovement = (firstCard: CardType, finalCard?: CardType) => {
-  // if the column has no cards, then simply return true
+  // Empty column rule: only Kings can be placed on empty columns
   if (!finalCard) {
-    return true;
+    return firstCard.cardNumber === 13;
   }
   // if the cards have the same color, then return false
   if (firstCard.cardColor === finalCard.cardColor) {
@@ -255,6 +255,11 @@ export const addDragginCardsToColumn = (
   const finalCol = [...columns[finalId]];
 
   // check if the movement respects the game rules
+  // guard against empty dragging arrays
+  if (!cardDragging || cardDragging.length === 0) {
+    return { sendBack: true };
+  }
+
   if (isValidMovement(cardDragging[0], finalCol[finalCol.length - 1])) {
     // add the swapped cards to the final column
     cardDragging.forEach((card: CardType) =>
@@ -296,6 +301,34 @@ export const removeDraggedCard = (
     };
   }
 
+  return {
+    columns: {
+      ...columns,
+      [columnId]: tempCol
+    }
+  };
+};
+
+export const removeSpecificCardFromColumn = (
+  columns: Record<string, Array<CardType>>,
+  columnId: string,
+  card: CardType
+) => {
+  const tempCol = [...columns[columnId]];
+  const originalLength = tempCol.length;
+  const idx = tempCol.findIndex(c => c.id === card.id);
+  if (idx === -1) {
+    return { columns };
+  }
+  // remove the specific card
+  tempCol.splice(idx, 1);
+  // if we removed the top card, flip the new top if needed
+  if (idx === originalLength - 1) {
+    const last = tempCol.length - 1;
+    if (last > -1 && tempCol[last].flipped === false) {
+      tempCol[last] = { ...tempCol[last], flipped: true };
+    }
+  }
   return {
     columns: {
       ...columns,

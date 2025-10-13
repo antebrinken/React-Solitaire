@@ -29,14 +29,15 @@ class GoalDrop {
     else {
       // deck -> goal | column -> goal
       // call the goal action that adds the dragging cards to the goal
-      this.dispatch(
-        goalActions.addDraggingCardsToGoal(fieldDropedTo, move.cards)
-      );
+      if (move.cards && move.cards.length > 0) {
+        this.dispatch(
+          goalActions.addDraggingCardsToGoal(fieldDropedTo, move.cards)
+        );
+      }
 
       // then reset the values at the deck redux
       this.dispatch(deckActions.resetCardDragging());
-      // then reset the values at the deck redux
-      this.dispatch(columnsActions.resetCardDragging());
+      // do NOT reset columns dragging here; we need it for removal in handleRemoveCard
     }
   }
 
@@ -59,13 +60,20 @@ class GoalDrop {
     }
     // if the card came from the deck pile
     if (finalMove.cards[0]?.cardField === "deckPile") {
-      // then remove the card that still is in the flipped pile and clear cardDragging state
-      this.dispatch(deckActions.removeCardFromFlipped());
+      // then remove the specific card that still is in the flipped pile and clear cardDragging state
+      this.dispatch(deckActions.removeSpecificCardFromFlipped(finalMove.cards[0]));
     } else {
       // if the card came from a column
       if (finalMove.source.indexOf("column") === 0) {
-        // then remove the card that still is in the column pile and clear cardDragging state
-        this.dispatch(columnsActions.removeDraggedCardsFromColumn());
+        // then remove the specific card from the source column and clear cardDragging state
+        this.dispatch(
+          columnsActions.removeSpecificCardFromColumn(
+            finalMove.source,
+            finalMove.cards[0]
+          )
+        );
+        // now safe to reset columns dragging state
+        this.dispatch(columnsActions.resetCardDragging());
       } else if (finalMove.source.indexOf("goal") === 0) {
         // if the card came from a goal, remove it from the origin goal pile explicitly
         this.dispatch(

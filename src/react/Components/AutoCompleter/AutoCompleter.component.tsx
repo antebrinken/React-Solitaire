@@ -14,13 +14,20 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 function AutoCompleter() {
   const dispatch = useDispatch();
 
-  const { columns, goals, deckPile, flippedPile, gameOver } = useSelector(
+  const { columns, goals, deckPile, flippedPile, gameOver, anyDragging } = useSelector(
     ({ Columns, Goal, Deck }: RootReducerState) => ({
       columns: Columns.columns,
       goals: Goal.goals,
       deckPile: Deck.deckPile,
       flippedPile: Deck.flippedPile,
-      gameOver: Goal.gameOver
+      gameOver: Goal.gameOver,
+      anyDragging:
+        Boolean(Columns.cardDragging) ||
+        Boolean(Goal.cardDragging) ||
+        Boolean(Deck.cardDragging) ||
+        // also pause while any double-click flow is active
+        Boolean(Columns.doubleClickTarget) ||
+        Boolean(Goal.doubleClickTarget)
     })
   );
 
@@ -28,8 +35,23 @@ function AutoCompleter() {
   const columnsMap = (columns || {}) as Record<string, CardType[]>;
   const goalsMap = (goals || {}) as Record<string, CardType[]>;
 
-  // Track if an auto-complete loop is running
-  const runningRef = useRef(false);
+  // interval control + latest-state refs to avoid stale closures
+  const intervalIdRef = useRef<number | null>(null);
+  const columnsRef = useRef(columnsMap);
+  const goalsRef = useRef(goalsMap);
+  const deckRef = useRef(deckPile);
+  const flippedRef = useRef(flippedPile);
+  const gameOverRef = useRef(gameOver);
+  const draggingRef = useRef(anyDragging);
+
+  useEffect(() => {
+    columnsRef.current = columnsMap;
+    goalsRef.current = goalsMap;
+    deckRef.current = deckPile;
+    flippedRef.current = flippedPile;
+    gameOverRef.current = gameOver;
+    draggingRef.current = anyDragging;
+  }, [columnsMap, goalsMap, deckPile, flippedPile, gameOver, anyDragging]);
 
   // Check if all cards in columns are flipped
   const allColumnsFlipped = (() => {
@@ -43,9 +65,10 @@ function AutoCompleter() {
   // Try to perform a single auto move; returns true if a move was performed
   const tryAutoMove = async (): Promise<boolean> => {
     // 1) Try flipped pile top to goal
-    const flippedTop = flippedPile[flippedPile.length - 1];
+    const flipped = flippedRef.current;
+    const flippedTop = flipped[flipped.length - 1];
     if (flippedTop) {
-      const targetId = getValidTarget(goalsMap, flippedTop);
+      const targetId = getValidTarget(goalsRef.current, flippedTop);
       if (targetId) {
         // remove from flipped and add to goal
         dispatch(deckActions.removeCardFromFlipped());
@@ -63,12 +86,13 @@ function AutoCompleter() {
     }
 
     // 2) Try any column top to goal
-    const colIds: string[] = Object.keys(columnsMap || {});
+    const cols = columnsRef.current;
+    const colIds: string[] = Object.keys(cols || {});
     for (const colId of colIds) {
-      const col = columnsMap[colId] || [];
+      const col = cols[colId] || [];
       const top: CardType | undefined = col[col.length - 1];
       if (!top || !top.flipped) continue;
-      const targetId = getValidTarget(goalsMap, top);
+      const targetId = getValidTarget(goalsRef.current, top);
       if (targetId) {
         // remove one from column and add to goal
         dispatch(columnsActions.removeNCardsFromColumn(colId, 1, false));
@@ -86,13 +110,13 @@ function AutoCompleter() {
     }
 
     // 3) If no immediate move, but deck has cards, flip one to flipped pile
-    if (deckPile.length > 0) {
+    if (deckRef.current.length > 0) {
       dispatch(deckActions.flipDeckPile());
       return true;
     }
 
     // 4) If deck empty but flipped still has cards and no move available, reset deck to continue cycling
-    if (deckPile.length === 0 && flippedPile.length > 0) {
+    if (deckRef.current.length === 0 && flippedRef.current.length > 0) {
       dispatch(deckActions.startUndoAnimation());
       setTimeout(() => dispatch(deckActions.resetDeck()), 600);
       dispatch(
@@ -111,29 +135,38 @@ function AutoCompleter() {
     return false;
   };
 
-  const runAutoComplete = async () => {
-    if (runningRef.current || gameOver) return;
-    runningRef.current = true;
-    try {
-      // Keep performing moves until none are possible or game is over
-      // Small delay between moves for UI
-      // eslint-disable-next-line no-constant-condition
-      while (!gameOver) {
-        const moved = await tryAutoMove();
-        if (!moved) break;
-        await delay(150);
-      }
-    } finally {
-      runningRef.current = false;
-    }
-  };
-
   useEffect(() => {
-    if (allColumnsFlipped && !gameOver) {
-      runAutoComplete();
+    const shouldRun = allColumnsFlipped && !gameOver && !anyDragging;
+    // Clear any previous interval when conditions change
+    if (intervalIdRef.current) {
+      window.clearInterval(intervalIdRef.current);
+      intervalIdRef.current = null;
     }
+    if (!shouldRun) return;
+
+    // Fast-paced, one move per tick. Increase delay if needed for smoother animations.
+    const TICK_MS = 120;
+    intervalIdRef.current = window.setInterval(() => {
+      // pause if state no longer valid
+      if (!allColumnsFlipped || gameOverRef.current || draggingRef.current) {
+        if (intervalIdRef.current) {
+          window.clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
+        }
+        return;
+      }
+      // fire-and-forget; internal awaits only for reset animation
+      void tryAutoMove();
+    }, TICK_MS);
+
+    return () => {
+      if (intervalIdRef.current) {
+        window.clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allColumnsFlipped, gameOver, columns, goals, deckPile, flippedPile]);
+  }, [allColumnsFlipped, gameOver, anyDragging]);
 
   return null;
 }
