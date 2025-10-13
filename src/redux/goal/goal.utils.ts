@@ -134,7 +134,7 @@ export const setCardDragging = (
   const cardDragging = tempGoalPile.pop();
 
   return {
-    cardDragging: [cardDragging],
+    cardDragging: cardDragging ? [cardDragging] : [],
     cardDraggingGoal: goalId
   };
 };

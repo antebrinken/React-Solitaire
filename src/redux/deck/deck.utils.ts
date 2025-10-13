@@ -125,7 +125,7 @@ export const setCardDragging = (flippedPile: Array<CardType>) => {
 
   // only return the cards that are being dragged
   return {
-    cardDragging: [cardFlipped]
+    cardDragging: cardFlipped ? [cardFlipped] : []
   };
 };
 

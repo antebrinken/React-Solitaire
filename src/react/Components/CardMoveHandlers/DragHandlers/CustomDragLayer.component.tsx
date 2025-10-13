@@ -32,7 +32,8 @@ function CustomDragLayer() {
 
   // render cards components from the cards dragging array (flipped)
   const getCards = () => {
-    const cardsArray = cardDragging.map((card: CardType) => {
+    const safeDragging: CardType[] = (cardDragging || []).filter(Boolean);
+    const cardsArray = safeDragging.map((card: CardType) => {
       return (
         <CardFrame
           key={`cardframedraggable_${card.id}`}
