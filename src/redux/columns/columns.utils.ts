@@ -359,32 +359,20 @@ export const removeNCardsFromColumn = (
 ) => {
   // create copy of the column
   const tempCol = [...columns[columnId]];
-
-  // DEBUG: Log what we're doing
-  console.log('removeNCardsFromColumn: Before removal:', tempCol.length, 'cards, nCards:', nCards, 'shouldFlip:', movementWithFlip);
-
   // remove the last card
   tempCol.splice(-nCards, nCards);
 
   // get index of last card (now the top card after removal)
   const lastCard = tempCol.length - 1;
-
-  console.log('removeNCardsFromColumn: After removal:', tempCol.length, 'cards, lastCard index:', lastCard);
-
   // Only flip if we should flip AND there's a card to flip
   if (lastCard >= 0 && movementWithFlip) {
     // Check if this card actually needs flipping
     if (tempCol[lastCard].flipped === false) {
-      console.log('removeNCardsFromColumn: Flipping card at index', lastCard, 'from', tempCol[lastCard].image);
       tempCol[lastCard] = {
         ...tempCol[lastCard],
         flipped: true
       };
-    } else {
-      console.log('removeNCardsFromColumn: Card at index', lastCard, 'is already flipped');
     }
-  } else {
-    console.log('removeNCardsFromColumn: No flip needed - lastCard:', lastCard, 'movementWithFlip:', movementWithFlip);
   }
 
   return {

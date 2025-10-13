@@ -6,7 +6,8 @@ import {
   checkMoveFromAnyColumns,
   setCardDragging,
   swapGoals,
-  undoSwapGoals
+  undoSwapGoals,
+  removeCardFromGoal as removeTopCardFromGoal
 } from "./goal.utils";
 import { ActionsCreators } from "./goal.actions";
 import { CardType } from "../gameBoard/gameBoard.types";
@@ -147,11 +148,17 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
         ...addCardToGoalImmutable(state.goals, action.goalId, action.card)
       };
 
-    case GoalActionTypes.REMOVE_CARD_FROM_GOAL:
-      return {
-        ...state,
-        ...removeCardFromGoalImmutable(state.goals, action.goalId, action.card)
-      };
+    case GoalActionTypes.REMOVE_CARD_FROM_GOAL: {
+      // If a specific card is provided, remove by id; otherwise remove the top card (undo/redo flows)
+      if (action.card) {
+        return {
+          ...state,
+          ...removeCardFromGoalImmutable(state.goals, action.goalId!, action.card)
+        };
+      }
+      const removeTopResult = removeTopCardFromGoal(state.goals, action.goalId!);
+      return { ...state, ...removeTopResult };
+    }
 
     // ------------------------
     // Double-click actions

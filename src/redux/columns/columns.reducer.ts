@@ -56,39 +56,7 @@ const INITIAL_COLUMNS: InitialColumns = {
   columnMoveSource: undefined
 };
 
-// -------------------------------
-// Hjälpfunktioner (immutabla)
-// -------------------------------
-function addCardToColumnImmutable(
-  columns: Record<string, CardType[]>,
-  columnId: string,
-  cardToAdd: CardType
-) {
-  return { ...columns, [columnId]: [...columns[columnId], cardToAdd] };
-}
-
-function removeNCardsFromColumnImmutable(
-  columns: Record<string, CardType[]>,
-  columnId: string,
-  nCards: number
-) {
-  return {
-    ...columns,
-    [columnId]: columns[columnId].slice(0, columns[columnId].length - nCards)
-  };
-}
-
-function removeDraggedCardImmutable(
-  columns: Record<string, CardType[]>,
-  columnId: string,
-  cardsToRemove: CardType[]
-) {
-  const idsToRemove = new Set(cardsToRemove.map(card => card.id));
-  return {
-    ...columns,
-    [columnId]: columns[columnId].filter(card => !idsToRemove.has(card.id))
-  };
-}
+// Removed legacy immutable helpers (unused)
 
 // -------------------------------
 // Reducer

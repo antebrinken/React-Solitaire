@@ -48,6 +48,15 @@ class GoalDrop {
         - remove the card from the goal it came from
   */
   handleRemoveCard(finalMove: GameMove) {
+    // If it was a goal -> goal move, swapping already handled removal in reducer
+    if (
+      finalMove.source.indexOf("goal") === 0 &&
+      finalMove.target.indexOf("goal") === 0
+    ) {
+      this.dispatch(goalActions.resetCardDragging());
+      this.dispatch(gameBoardActions.addGameMove(finalMove));
+      return;
+    }
     // if the card came from the deck pile
     if (finalMove.cards[0]?.cardField === "deckPile") {
       // then remove the card that still is in the flipped pile and clear cardDragging state
@@ -57,11 +66,11 @@ class GoalDrop {
       if (finalMove.source.indexOf("column") === 0) {
         // then remove the card that still is in the column pile and clear cardDragging state
         this.dispatch(columnsActions.removeDraggedCardsFromColumn());
-      } else if (finalMove.cards[0]?.cardField.includes("goal")) {
+      } else if (finalMove.source.indexOf("goal") === 0) {
         // if the card came from a goal, remove it from the origin goal pile explicitly
         this.dispatch(
           goalActions.removeCardFromGoal(
-            finalMove.cards[0]?.cardField,
+            finalMove.source,
             finalMove.cards[0]
           )
         );

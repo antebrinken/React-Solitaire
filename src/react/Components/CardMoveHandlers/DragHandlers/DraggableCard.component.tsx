@@ -78,10 +78,9 @@ function DraggableCard({
   // on component did mount, call the getPreviewImage function
   useEffect(getPreviewImage, []);
 
-  // a card should be hidden, if it is dragging or if it is inside the cardDragging array
-  const hideCard =
-    isDragging ||
-    (card.cardField?.indexOf("column") === 0 && cardDragging.includes(card));
+  // Hide the source card while dragging, regardless of origin pile
+  // This avoids visual duplication for goals, columns, and deck
+  const hideCard = isDragging || cardDragging.includes(card);
 
   // return the card component with the ref of the drag event
   return (

@@ -53,11 +53,11 @@ class ColumnDrop {
       this.dispatch(deckActions.removeCardFromFlipped());
     } else {
       // if the card came from a goal
-      if (finalMove.cards[0]?.cardField.includes("goal")) {
+      if (finalMove.source.includes("goal")) {
         // then remove the card that still is in the goal pile and clear cardDragging state
         this.dispatch(
           goalActions.removeCardFromGoal(
-            finalMove.cards[0]?.cardField,
+            finalMove.source,
             finalMove.cards[0]
           )
         );

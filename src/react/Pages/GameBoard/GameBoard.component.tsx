@@ -15,6 +15,7 @@ import CustomDragLayer from "../../Components/CardMoveHandlers/DragHandlers/Cust
 import DropHandler from "../../Components/CardMoveHandlers/DropHandlers/DropHandler.component";
 import GameOverModal from "../../Components/Modals/GameOverModal.component";
 import JoyrideSteps from "./JoyrideSteps.component";
+import AutoCompleter from "../../Components/AutoCompleter/AutoCompleter.component";
 import { Prompt } from "react-router";
 import { RedoOutlined } from "@ant-design/icons";
 import columnsActions from "../../../redux/columns/columns.actions";
@@ -228,6 +229,8 @@ function GameBoard() {
         <GameOptions />
         {/* preview of the card being dragged */}
         <CustomDragLayer />
+        {/* auto-complete once all columns are flipped */}
+        <AutoCompleter />
       </DropHandler>
     </>
   );

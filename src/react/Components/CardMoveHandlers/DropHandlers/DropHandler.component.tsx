@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, memo, useEffect, useState } from "react";
+import React, { PropsWithChildren, memo, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardType } from "../../../../redux/gameBoard/gameBoard.types";
 import ColumnDrop from "./ColumnDropHandler";
@@ -48,6 +48,16 @@ const DropHandler = ({
     undefined
   );
 
+  // snapshot of the move at drop time (before any resets mutate redux state)
+  const moveAtDropRef = useRef<
+    | {
+        source: string;
+        cards: Array<CardType>;
+        movementWithFlip?: boolean;
+      }
+    | undefined
+  >(undefined);
+
   /**
    * Gets the field the card was dropped on
    * @param position {x, y} of the card when it was dropped
@@ -88,6 +98,12 @@ const DropHandler = ({
     if (fieldDropedToTemp) {
       // save the field it was dropped to
       setFieldDropedTo(fieldDropedToTemp);
+      // snapshot the current move before dispatching actions that reset dragging state
+      moveAtDropRef.current = {
+        source: move.source,
+        cards: move.cards,
+        movementWithFlip: move.movementWithFlip
+      };
       // call the parent's onDrop function
       if (fieldDropedToTemp.includes("column")) {
         ColumnInstance.onDrop(move, fieldDropedToTemp);
@@ -106,15 +122,23 @@ const DropHandler = ({
   const handleSendBack = () => {
     // if the field is not undefined, then can add move (if one of the sendBack variables is false)
     if (fieldDropedTo) {
+      // prefer the snapshot taken at drop time to avoid using mutated redux state
+      const baseMove = moveAtDropRef.current || move;
       const finalMove = {
-        ...move,
+        ...baseMove,
         target: fieldDropedTo
       };
       // if the movement to the column pile was successful
       if (sendBackColumn === false) {
         ColumnInstance.handleRemoveCard(finalMove);
+        // clear snapshot after handling to avoid reuse
+        moveAtDropRef.current = undefined;
+        setFieldDropedTo(undefined);
       } else if (sendBackGoal === false) {
         GoalInstance.handleRemoveCard(finalMove);
+        // clear snapshot after handling to avoid reuse
+        moveAtDropRef.current = undefined;
+        setFieldDropedTo(undefined);
       }
     }
   };
