@@ -37,6 +37,8 @@ function AutoCompleter() {
 
   // interval control + latest-state refs to avoid stale closures
   const intervalIdRef = useRef<number | null>(null);
+  // Prevent overlapping moves (guards against stale refs between ticks)
+  const busyRef = useRef<boolean>(false);
   const columnsRef = useRef(columnsMap);
   const goalsRef = useRef(goalsMap);
   const deckRef = useRef(deckPile);
@@ -64,14 +66,16 @@ function AutoCompleter() {
 
   // Try to perform a single auto move; returns true if a move was performed
   const tryAutoMove = async (): Promise<boolean> => {
+    if (busyRef.current) return false;
+    busyRef.current = true;
     // 1) Try flipped pile top to goal
     const flipped = flippedRef.current;
     const flippedTop = flipped[flipped.length - 1];
     if (flippedTop) {
       const targetId = getValidTarget(goalsRef.current, flippedTop);
       if (targetId) {
-        // remove from flipped and add to goal
-        dispatch(deckActions.removeCardFromFlipped());
+        // remove specific card from flipped and add to goal
+        dispatch(deckActions.removeSpecificCardFromFlipped(flippedTop));
         dispatch(goalActions.addCardToGoal(targetId, flippedTop));
         dispatch(
           gameBoardActions.addGameMove({
@@ -81,6 +85,9 @@ function AutoCompleter() {
             movementWithFlip: false
           })
         );
+        // give store/react a moment to propagate before next tick
+        await delay(50);
+        busyRef.current = false;
         return true;
       }
     }
@@ -94,8 +101,8 @@ function AutoCompleter() {
       if (!top || !top.flipped) continue;
       const targetId = getValidTarget(goalsRef.current, top);
       if (targetId) {
-        // remove one from column and add to goal
-        dispatch(columnsActions.removeNCardsFromColumn(colId, 1, false));
+        // remove the specific top card and add to goal
+        dispatch(columnsActions.removeSpecificCardFromColumn(colId, top));
         dispatch(goalActions.addCardToGoal(targetId, top));
         dispatch(
           gameBoardActions.addGameMove({
@@ -105,6 +112,8 @@ function AutoCompleter() {
             movementWithFlip: false
           })
         );
+        await delay(50);
+        busyRef.current = false;
         return true;
       }
     }
@@ -112,6 +121,8 @@ function AutoCompleter() {
     // 3) If no immediate move, but deck has cards, flip one to flipped pile
     if (deckRef.current.length > 0) {
       dispatch(deckActions.flipDeckPile());
+      await delay(50);
+      busyRef.current = false;
       return true;
     }
 
@@ -128,10 +139,12 @@ function AutoCompleter() {
       );
       // wait for animation duration before next attempt
       await delay(650);
+      busyRef.current = false;
       return true;
     }
 
     // No moves possible
+    busyRef.current = false;
     return false;
   };
 
