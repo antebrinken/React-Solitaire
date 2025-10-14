@@ -67,6 +67,8 @@ class GoalDoubleClickHandler {
           movementWithFlip: true
         })
       );
+      // Clear goal double-click target so future double-clicks re-trigger
+      this.dispatch(goalActions.resetCardDragging());
     }
     return true;
   }

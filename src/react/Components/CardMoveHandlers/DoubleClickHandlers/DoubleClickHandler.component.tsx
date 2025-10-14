@@ -42,6 +42,8 @@ function DoubleClickHandler({
 
   // call the first handler of the double click when the handling move changes to true
   const handleDoubleClick = () => {
+    // Prevent re-entrancy: ignore while a previous double-click is processing
+    if (handlingMove) return;
     setHandlingMove(true);
     handler.handleDoubleClick();
   };

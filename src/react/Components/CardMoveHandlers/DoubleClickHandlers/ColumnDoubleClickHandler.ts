@@ -87,6 +87,9 @@ class ColumnDoubleClickHandler {
           movementWithFlip: finalMovementWithFlip
         })
       );
+
+      // clear goal double-click target/dragging state to avoid stale target lingering
+      this.dispatch(goalActions.resetCardDragging());
       // sets the move as over
       return true;
     }
