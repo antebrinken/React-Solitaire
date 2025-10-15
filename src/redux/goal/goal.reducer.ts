@@ -67,11 +67,17 @@ function addCardToGoalImmutable(
   goalId: string,
   cardToAdd: CardType
 ) {
+  const updatedGoals = {
+    ...goals,
+    [goalId]: [...goals[goalId], cardToAdd]
+  };
+  // Determine game over: all goal piles have 13 cards
+  const allComplete = Object.keys(updatedGoals).every(
+    key => updatedGoals[key].length >= 13
+  );
   return {
-    goals: {
-      ...goals,
-      [goalId]: [...goals[goalId], cardToAdd]
-    }
+    goals: updatedGoals,
+    gameOver: allComplete
   };
 }
 
@@ -136,7 +142,8 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
         cardDragging: undefined,
         cardDraggingGoal: undefined,
         doubleClickTarget: !state.doubleClickTarget,
-        gameOver: false
+        // Do not reset gameOver here; preserve completion state
+        gameOver: state.gameOver
       };
 
     // ------------------------

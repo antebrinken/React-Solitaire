@@ -46,6 +46,25 @@ function DraggableCard({
   const [{ isDragging }, drag, preview] = useDrag({
     item: { type, card }, // item denotes the element type, unique identifier (id) and card info
     begin: () => onDrag(card), // call the onDrag function when dragging begins
+    end: (_item: ExplicitAny, monitor: ExplicitAny) => {
+      // If drag was cancelled (no valid drop), clear any lingering dragging state
+      if (!monitor.didDrop()) {
+        switch (card.cardField) {
+          case "deckPile":
+            dispatch(deckActions.resetCardDragging());
+            break;
+          case "goal1Pile":
+          case "goal2Pile":
+          case "goal3Pile":
+          case "goal4Pile":
+            dispatch(goalActions.resetCardDragging());
+            break;
+          default:
+            // columns
+            dispatch(columnsActions.resetCardDragging());
+        }
+      }
+    },
     collect: (monitor: ExplicitAny) => ({
       isDragging: monitor.isDragging()
     })
@@ -79,8 +98,11 @@ function DraggableCard({
   useEffect(getPreviewImage, []);
 
   // Hide the source card while dragging, regardless of origin pile
-  // This avoids visual duplication for goals, columns, and deck
-  const hideCard = isDragging || cardDragging.includes(card);
+  // Use id-based check to avoid reference mismatches causing duplicates
+  const isInDragging = (cardDragging || []).some((c: CardType) => c && c.id === card.id);
+  // Do not hide the source card when dragging from the flipped (trash) pile.
+  // Hiding it interferes with double-click recognition and can appear as a disappearance on click-hold.
+  const hideCard = card.cardField === "deckPile" ? false : isDragging || isInDragging;
 
   // return the card component with the ref of the drag event
   return (

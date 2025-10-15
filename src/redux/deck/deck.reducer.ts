@@ -119,7 +119,9 @@ const deckReducer = (state = INITIAL_DECK, action: ActionsCreators) => {
       return {
         ...state,
         ...resetResult,
-        startUndoAnimation: false
+        startUndoAnimation: false,
+        // ensure no lingering drag state after a full reset
+        cardDragging: undefined
       };
 
     /**
@@ -138,7 +140,9 @@ const deckReducer = (state = INITIAL_DECK, action: ActionsCreators) => {
       return {
         ...state,
         ...undoResetResult,
-        startRedoResetAnimation: false
+        startRedoResetAnimation: false,
+        // clear any drag state when rebuilding flipped pile
+        cardDragging: undefined
       };
 
     // ********************************************************

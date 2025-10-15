@@ -96,6 +96,8 @@
     "languages.spanish": "Spanish",
     "modal.gameStatistics": "Game Statistics",
     "modal.newHighScore": "New High Score!",
+    "modal.completedGameTitle": "You completed the entire game!",
+    "btn.newSolitaireGame": "New Solitaire game",
     "placeholder.username": "Add here a username",
     "sidebar.about": "About",
     "sidebar.configurations": "Configurations",

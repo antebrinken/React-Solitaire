@@ -58,7 +58,7 @@ function FlippedPile() {
               }
             >
               <CardImage
-                image="flowers.png"
+                image="puzzlrco_logo.png"
                 directory="CardsBackPatterns"
                 additionalClassName="cardFlipFront"
               />

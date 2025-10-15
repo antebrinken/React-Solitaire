@@ -102,10 +102,31 @@ function GameOverModal() {
     dispatch(goalActions.resetCardDragging());
   };
 
+  const handleStartNewGame = () => {
+    if (hasNewHighScore) {
+      const finalUserName = inputRef?.state?.value || userName;
+      dispatch(
+        highscoresActions.addHighScore(finalUserName, gameStatistics.finalScore)
+      );
+      if (finalUserName !== userName) {
+        dispatch(userActions.changeUserSettings({ userName: finalUserName }));
+      }
+    }
+
+    // Close modal and start a fresh game immediately
+    setVisible(false);
+    dispatch(gameBoardActions.showingConfirm(false));
+    dispatch(goalActions.resetCardDragging());
+    dispatch(gameBoardActions.createGame());
+  };
+
   if (gameOver && visible) {
     return (
       <div className="gameFullDiv gameOverModal">
         <div className="gameOverStatistics">
+          <div style={{ fontSize: 18, marginBottom: 8 }}>
+            <FormattedMessage id="modal.completedGameTitle" />
+          </div>
           <div>
             <FormattedMessage id="modal.gameStatistics" />
           </div>
@@ -138,6 +159,15 @@ function GameOverModal() {
             onClick={handleCloseModal}
           >
             <span>Ok</span>
+          </div>
+          <div
+            className={`animatedButton divButton gameOverAnimatedButton`}
+            onClick={handleStartNewGame}
+            style={{ marginTop: 10 }}
+          >
+            <span>
+              <FormattedMessage id="btn.newSolitaireGame" />
+            </span>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ function AboutPage() {
           <div className="imageHere">
             <img
               className="developerImg"
-              src={require("../../../images/developer.jpg")}
+              src={require("../../../images/icon.png")}
               alt=""
             />
           </div>
