@@ -124,10 +124,33 @@
   background-color: white;
 }
 
+// Smaller cards for small phones (e.g., iPhone SE)
+@media screen and (max-width: 375px) {
+  .cardContainer {
+    width: 64px;
+    height: 92px;
+  }
+  .cardContent {
+    margin: 2px;
+  }
+}
+
+@media screen and (min-width: 376px) and (max-width: 767px) {
+  .cardContainer {
+    width: 78px;
+    height: 112px;
+  }
+  .cardContent {
+    margin: 3px;
+  }
+}
+
 // ----------------------------------
 // CardSpot
 .cardSpotCol {
   z-index: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .cardSpot {

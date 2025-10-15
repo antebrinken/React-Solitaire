@@ -19,25 +19,22 @@
   margin-top: 50px;
 }
 
+// Support portrait without rotating the whole game (small phones)
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
   .joyrideGamePage {
     overflow: hidden !important;
-    transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    height: 100vw;
-    position: absolute;
-    top: 100%;
-    left: 0;
+    width: 100vw;
+    height: auto;
+    position: relative;
 
     .baseEmptySpots {
-      min-height: calc(100vh * 1.35);
+      min-height: 120vh;
     }
   }
 
   .flipIcon {
-    font-size: 50px !important;
-    margin-top: 100px;
+    font-size: 36px !important;
+    margin-top: 40px;
   }
 }
 
@@ -46,38 +43,85 @@
     overflow: hidden !important;
     background: @primaryColor;
     height: auto !important;
-    min-height: 140vh !important;
+    min-height: 100vh !important;
+    // Reserve a bit more space for the bottom help bar so stacked cards aren't obscured
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
     .boardInfoRow {
       height: 10%;
     }
 
     .boardDeckRow {
-      height: 90px;
-
-      .deckPileMobile {
-        margin-top: 110px;
-      }
+      height: 88px;
     }
 
     .gameColumnsRow {
-      margin-top: 5%;
+      margin-top: 1%;
     }
 
     #goal1Pile,
     #goal2Pile,
     #goal3Pile,
     #goal4Pile {
-      margin-top: -85px;
+      margin-top: 0;
+    }
+  }
+
+  // Remove ad-hoc nudges for columns 1 and 2; rely on centered flex alignment
+  @media screen and (max-width: 767px) {
+    #column1Pile,
+    #column2Pile {
+      margin-left: 0;
+      // Nudge down slightly to align with borders on small screens
+      margin-top: 2px;
+    }
+  }
+
+  // Slightly larger devices can use a smaller nudge
+  @media screen and (min-width: 376px) and (max-width: 767px) {
+    #column1Pile,
+    #column2Pile {
+      margin-top: 1px;
+    }
+  }
+
+  // Explicit inner padding nudge so absolute-stacked cards shift down within their column containers
+  @media screen and (max-width: 375px) {
+    #column1Pile .columnPile,
+    #column2Pile .columnPile {
+      padding-top: 6px;
+    }
+  }
+
+  @media screen and (min-width: 376px) and (max-width: 767px) {
+    #column1Pile .columnPile,
+    #column2Pile .columnPile {
+      padding-top: 4px;
     }
   }
 
   .baseEmptySpots {
-    min-height: 140vh;
+    // Give extra vertical room on small screens so columns can extend without hitting the help bar
+    min-height: 130vh;
     background: @primaryColor;
     height: 100%;
     .joyrideColumns {
-      margin-top: 5%;
+      margin-top: 1%;
       padding-bottom: 0;
     }
+  }
+}
+
+// ----------------------------------
+// Desktop behavior
+@media screen and (min-width: 768px) {
+  .joyrideGamePage {
+    // Allow content and columns to extend and scroll under the help bar
+    height: auto !important;
+    min-height: 100vh !important;
+    // Reserve even more space so the fixed help bar sits further down
+    padding-bottom: 240px;
+    overflow-y: auto !important;
+    // Prevent any horizontal scrollbar
+    overflow-x: hidden !important;
   }
 }

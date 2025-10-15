@@ -81,7 +81,7 @@ function BaseEmptySpots() {
 
   return (
     <div className="baseEmptySpots" id="baseEmptySpots">
-      <Row gutter={6} className="boardDeckRow" align="middle">
+      <Row gutter={{ xs: 0, sm: 6, md: 8 }} className="boardDeckRow" align="middle">
         {/* Deck and Flipped piles */}
         <CardSpot ref={deckRef} offset={2} className="joyrideDeck deckCardSpot">
           {/* Button to reset deck */}
@@ -94,12 +94,12 @@ function BaseEmptySpots() {
         </CardSpot>
         <CardSpot ref={flippedRef} />
         {/* Goal Spots */}
-        <CardSpot offset={3} className="joyrideGoals" />
-        <CardSpot />
-        <CardSpot />
-        <CardSpot />
+        <CardSpot offset={3} className="goalSpot joyrideGoals" />
+        <CardSpot className="goalSpot" />
+        <CardSpot className="goalSpot" />
+        <CardSpot className="goalSpot" />
       </Row>
-      <Row gutter={6} align="middle" className="joyrideColumns">
+      <Row gutter={{ xs: 0, sm: 6, md: 8 }} align="middle" className="joyrideColumns">
         {/* Game Columns */}
         <CardSpot offset={2} className="joyrideDoubleClick" />
         <CardSpot />

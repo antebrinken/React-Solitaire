@@ -75,7 +75,7 @@ function CardFlippable(
           additionalClassName="cardFlipFront"
         />
         <CardImage
-          image="flowers.png"
+          image="puzzlrco_logo.png"
           directory="CardsBackPatterns"
           additionalClassName="cardFlipBack"
           onClick={handleFlip}

@@ -63,28 +63,70 @@ const DropHandler = ({
    * @param position {x, y} of the card when it was dropped
    */
   const getFieldToDrop = ({ x, y }: { x: number; y: number }) => {
-    // get page dimension
-    const innerWidth =
-      document.getElementById("baseEmptySpots")?.offsetWidth || 1;
-    const innerHeight = window.innerHeight;
-    // get column size
-    const initialOffset = ((innerWidth / 24) * 3) / 8;
-    const columnSizes = (innerWidth - initialOffset) / 7;
+    // Helper: get rect center
+    const center = (r: DOMRect) => ({ cx: r.left + r.width / 2, cy: r.top + r.height / 2 });
+    // Collect goal and column DOM rects
+    const goalIds = ["goal1Pile", "goal2Pile", "goal3Pile", "goal4Pile"];
+    const columnIds = [
+      "column1Pile",
+      "column2Pile",
+      "column3Pile",
+      "column4Pile",
+      "column5Pile",
+      "column6Pile",
+      "column7Pile"
+    ];
 
-    // should drop in one of the goal spots
-    if (y < innerHeight / 3.8) {
-      if (x > columnSizes * 3 + initialOffset) {
-        const goalNumber =
-          Math.ceil((x - initialOffset || 1) / columnSizes) - 3;
-        return `goal${goalNumber || 1}Pile`;
-      }
-      // any other result is invalid for this height
-      return undefined;
-    } else {
-      // should drop in a column pile
+    const goals = goalIds
+      .map(id => ({ id, el: document.getElementById(id) }))
+      .filter(x => x.el) as Array<{ id: string; el: HTMLElement }>;
+    const columns = columnIds
+      .map(id => ({ id, el: document.getElementById(id) }))
+      .filter(x => x.el) as Array<{ id: string; el: HTMLElement }>;
+
+    // If DOM not ready, fallback to previous heuristic targeting columns
+    if (goals.length === 0 && columns.length === 0) {
+      const innerWidth = document.getElementById("baseEmptySpots")?.offsetWidth || 1;
+      const initialOffset = ((innerWidth / 24) * 3) / 8;
+      const columnSizes = (innerWidth - initialOffset) / 7;
       const columnNumber = Math.ceil((x - initialOffset || 1) / columnSizes);
       return `column${columnNumber || 1}Pile`;
     }
+
+    // Determine which row (goals vs columns) is closer vertically to the drop point
+    const anyGoalRect = goals[0]?.el.getBoundingClientRect();
+    const anyColRect = columns[0]?.el.getBoundingClientRect();
+    const goalCy = anyGoalRect ? center(anyGoalRect).cy : Number.NEGATIVE_INFINITY;
+    const colCy = anyColRect ? center(anyColRect).cy : Number.POSITIVE_INFINITY;
+    const preferGoals = Math.abs(y - goalCy) < Math.abs(y - colCy);
+
+    const candidates = (preferGoals ? goals : columns).map(({ id, el }) => {
+      const rect = el.getBoundingClientRect();
+      const { cx, cy } = center(rect);
+      return { id, rect, cx, cy };
+    });
+
+    // First try: containment with a small tolerance
+    const tol = 10;
+    const hit = candidates.find(c =>
+      x >= c.rect.left - tol &&
+      x <= c.rect.right + tol &&
+      y >= c.rect.top - tol &&
+      y <= c.rect.bottom + tol
+    );
+    if (hit) return hit.id;
+
+    // Fallback: nearest by horizontal distance in the preferred row
+    const nearest = candidates.reduce(
+      (acc, c) => {
+        const dx = Math.abs(x - c.cx);
+        const dy = Math.abs(y - c.cy);
+        const d = dx + dy / 4; // weight horizontal more heavily
+        return d < acc.dist ? { id: c.id, dist: d } : acc;
+      },
+      { id: (preferGoals ? goals[0]?.id : columns[0]?.id) || "column1Pile", dist: Number.POSITIVE_INFINITY }
+    );
+    return nearest.id;
   };
 
   /**

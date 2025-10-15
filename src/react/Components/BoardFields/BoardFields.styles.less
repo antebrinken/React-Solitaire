@@ -90,12 +90,54 @@
 }
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+  // Keep options visible on small screens
   .boardMainOptionsRow {
-    bottom: -40vh;
-    padding: 80px 20px 20px 20px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)); // pull bar slightly above device chrome
+    padding: 8px 6px;
+    z-index: 50;
   }
 
   .boardMenuOptionsRow {
-    bottom: calc(-40vh + 40px);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(44px + env(safe-area-inset-bottom, 0px)); // above the main options bar
+    z-index: 50;
+  }
+
+  .boardDeckRow {
+    height: 88px;
+  }
+
+  // Align empty column borders with actual piles
+  .joyrideColumns {
+    margin-top: 1%;
+    padding-bottom: 0;
+  }
+}
+
+// ----------------------------------
+// Desktop overrides: keep bar at bottom, out of the way
+@media screen and (min-width: 768px) {
+  .boardMainOptionsRow {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .boardMenuOptionsRow {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 88px; // float a bit higher above the main options bar on desktop
+    z-index: 40;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

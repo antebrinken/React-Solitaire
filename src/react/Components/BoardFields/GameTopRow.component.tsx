@@ -8,7 +8,7 @@ import { Row } from "antd";
  */
 function GameTopRow() {
   return (
-    <Row gutter={6} className="boardDeckRow" align="middle">
+    <Row gutter={{ xs: 0, sm: 6, md: 8 }} className="boardDeckRow" align="middle">
       <Deck />
       <GoalPileWrapper />
     </Row>

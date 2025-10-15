@@ -90,6 +90,9 @@ function GameBoard() {
    * And either creates a new random game or resumes a previously saved game
    */
   const mountGameBoard = () => {
+    // Ensure no orientation modal is shown; allow portrait play
+    dispatch(gameBoardActions.showingConfirm(false));
+    dispatch(pageActions.setConfirmationModal("", "", undefined, undefined));
     if (history.action === "POP") {
       history.push("/");
     }
@@ -177,30 +180,11 @@ function GameBoard() {
   };
   useEffect(addGameToUser, [gameMoves]);
 
+  // Allow play in portrait on small devices (remove rotate modal)
   const handleMobilePortrait = () => {
-    if (window.innerWidth < 767 && window.innerWidth / window.innerHeight < 1) {
-      if (location.pathname === "/game") {
-        dispatch(gameBoardActions.showingConfirm(true));
-        dispatch(
-          pageActions.setConfirmationModal(
-            <FormattedMessage id="confirm.mobilePortrait" />,
-            <div className="turnDeviceContainer">
-              <FormattedMessage id="confirm.turnPhone" />
-              <RedoOutlined className="flipIcon" />
-            </div>,
-            undefined,
-            undefined,
-            "adjustToGameOptions"
-          )
-        );
-      } else {
-        dispatch(gameBoardActions.showingConfirm(false));
-      }
-    } else {
-      dispatch(gameBoardActions.showingConfirm(false));
-    }
+    dispatch(gameBoardActions.showingConfirm(false));
   };
-  useEffect(handleMobilePortrait, [window.innerWidth, location.pathname]);
+  useEffect(handleMobilePortrait, [location.pathname]);
 
   // ---------------------------------------------------------
 
