@@ -76,7 +76,7 @@ function ColumnPile({ offset, columnCards, columnId }: ColumnPileProps) {
       pileId={columnId}
       pileCards={getCards()}
       offset={offset}
-      pileClassName="deckPile"
+      pileClassName=""
       insideClassName="columnPile"
     />
   );

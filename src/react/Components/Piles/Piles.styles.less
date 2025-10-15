@@ -46,6 +46,20 @@
   align-items: center; // center cards horizontally within column
 }
 
+// Fine alignment per column: nudge stacks slightly to the right
+// so they sit neatly within the visual column spots. The rightmost
+// column receives the largest nudge.
+#column1Pile .cardPileContainer { transform: translateX(2px); }
+#column2Pile .cardPileContainer { transform: translateX(4px); }
+#column3Pile .cardPileContainer { transform: translateX(6px); }
+#column4Pile .cardPileContainer { transform: translateX(8px); }
+#column5Pile .cardPileContainer { transform: translateX(10px); }
+#column6Pile .cardPileContainer { transform: translateX(12px); }
+#column7Pile .cardPileContainer { transform: translateX(14px); }
+
+// Ant Design breakpoints: xs < 576, sm >= 576, md >= 768
+// No breakpoint nudges needed when centered via flex
+
 @media screen and (min-width: 320px) and (max-width: 767px) {
   .cardContainerColumns {
     margin-top: 8px;

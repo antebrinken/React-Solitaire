@@ -15,20 +15,27 @@ function AutoCompleter() {
   const dispatch = useDispatch();
 
   const { columns, goals, deckPile, flippedPile, gameOver, anyDragging } = useSelector(
-    ({ Columns, Goal, Deck }: RootReducerState) => ({
-      columns: Columns.columns,
-      goals: Goal.goals,
-      deckPile: Deck.deckPile,
-      flippedPile: Deck.flippedPile,
-      gameOver: Goal.gameOver,
-      anyDragging:
-        Boolean(Columns.cardDragging) ||
-        Boolean(Goal.cardDragging) ||
-        Boolean(Deck.cardDragging) ||
-        // also pause while any double-click flow is active
-        Boolean(Columns.doubleClickTarget) ||
-        Boolean(Goal.doubleClickTarget)
-    })
+    ({ Columns, Goal, Deck }: RootReducerState) => {
+      const colDragging = Columns.cardDragging || [];
+      const goalDragging = Goal.cardDragging || [];
+      const deckDragging = Deck.cardDragging || [];
+
+      return {
+        columns: Columns.columns,
+        goals: Goal.goals,
+        deckPile: Deck.deckPile,
+        flippedPile: Deck.flippedPile,
+        gameOver: Goal.gameOver,
+        // consider dragging only if there are cards being dragged
+        anyDragging:
+          colDragging.length > 0 ||
+          goalDragging.length > 0 ||
+          deckDragging.length > 0 ||
+          // also pause while any double-click flow is active
+          Boolean(Columns.doubleClickTarget) ||
+          Boolean(Goal.doubleClickTarget)
+      };
+    }
   );
 
   // Ensure strong typing for maps

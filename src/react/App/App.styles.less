@@ -3,6 +3,8 @@
   height: -webkit-fill-available;
   min-height: 100vh;
   background-color: @primaryColor;
+  // Make the app layout the only scroll parent; page content handles its own scroll
+  overflow: hidden;
 
   .appLayout {
     min-height: 100%;
@@ -17,8 +19,9 @@
         height: 100%;
         background-color: @primaryColor;
         color: @fontColor;
+        // The game page manages its own scroll; prevent nested scrollbars
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: hidden;
       }
 
       .blurBackground {

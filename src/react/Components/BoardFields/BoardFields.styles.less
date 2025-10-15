@@ -4,6 +4,9 @@
   position: absolute;
   left: 0;
   right: 0;
+  // Provide extra vertical space so a scrollbar exists from the start
+  // This avoids sudden layout shifts when columns grow tall
+  min-height: 140vh;
 }
 
 .deckCardSpot {
@@ -66,6 +69,8 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  // Ensure options bar stays clickable above card stacks
+  z-index: 50;
 }
 
 .boardMenuOptionsRow {
@@ -73,6 +78,8 @@
   position: absolute;
   bottom: 60px;
   width: 100%;
+  // Keep secondary bar above columns too
+  z-index: 50;
 }
 
 // ----------------------------------

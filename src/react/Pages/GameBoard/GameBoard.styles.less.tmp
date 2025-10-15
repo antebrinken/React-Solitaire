@@ -8,7 +8,7 @@
   min-height: 100vh !important;
   background: @primaryColor;
   // Keep scrollbar space reserved to avoid column shift when it appears
-  scrollbar-gutter: stable;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
   .dragLayer {
     position: fixed;
@@ -128,4 +128,3 @@
     overflow-x: hidden !important;
   }
 }
-

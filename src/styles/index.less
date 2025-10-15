@@ -2,6 +2,14 @@
 @import (once) "./variables.less";
 @import (once) "./fonts/fonts.less";
 
+// Global root: remove browser scrollbar and match background
+html,
+body {
+  height: 100%;
+  overflow: hidden; // prevent outer (rightmost) scrollbar
+  background: @primaryColor; // ensure no white background while scrolling
+}
+
 .react-solitaire {
   /* Global */
   font-family: @fontFamily;
