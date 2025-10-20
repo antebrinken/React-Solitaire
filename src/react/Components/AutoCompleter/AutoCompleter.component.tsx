@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducerState } from "../../../global";
 import deckActions from "../../../redux/deck/deck.actions";
@@ -43,17 +43,17 @@ function AutoCompleter() {
   const goalsMap = (goals || {}) as Record<string, CardType[]>;
 
   // interval control + latest-state refs to avoid stale closures
-  const intervalIdRef = useRef<number | null>(null);
+  const intervalIdRef = React.useRef<number | null>(null);
   // Prevent overlapping moves (guards against stale refs between ticks)
-  const busyRef = useRef<boolean>(false);
-  const columnsRef = useRef(columnsMap);
-  const goalsRef = useRef(goalsMap);
-  const deckRef = useRef(deckPile);
-  const flippedRef = useRef(flippedPile);
-  const gameOverRef = useRef(gameOver);
-  const draggingRef = useRef(anyDragging);
+  const busyRef = React.useRef<boolean>(false);
+  const columnsRef = React.useRef(columnsMap);
+  const goalsRef = React.useRef(goalsMap);
+  const deckRef = React.useRef(deckPile);
+  const flippedRef = React.useRef(flippedPile);
+  const gameOverRef = React.useRef(gameOver);
+  const draggingRef = React.useRef(anyDragging);
 
-  useEffect(() => {
+  React.useEffect(() => {
     columnsRef.current = columnsMap;
     goalsRef.current = goalsMap;
     deckRef.current = deckPile;
@@ -155,7 +155,7 @@ function AutoCompleter() {
     return false;
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const shouldRun = allColumnsFlipped && !gameOver && !anyDragging;
     // Clear any previous interval when conditions change
     if (intervalIdRef.current) {

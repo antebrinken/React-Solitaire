@@ -32,7 +32,11 @@ function GameColumnWrapper() {
   } = columns;
 
   return (
-    <Row gutter={{ xs: 0, sm: 6, md: 8 }} className="gameColumnsRow" align="middle">
+    <Row
+      gutter={{ xs: 0, sm: 6, md: 8 }}
+      className="gameColumnsRow items-center justify-between"
+      align="middle"
+    >
       <ColumnPile columnId="column1Pile" columnCards={column1Pile} offset={2} />
       <ColumnPile columnId="column2Pile" columnCards={column2Pile} />
       <ColumnPile columnId="column3Pile" columnCards={column3Pile} />

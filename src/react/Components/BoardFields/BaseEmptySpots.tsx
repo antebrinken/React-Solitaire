@@ -94,10 +94,23 @@ function BaseEmptySpots() {
         </CardSpot>
         <CardSpot ref={flippedRef} />
         {/* Goal Spots */}
-        <CardSpot offset={3} className="goalSpot joyrideGoals" />
-        <CardSpot className="goalSpot" />
-        <CardSpot className="goalSpot" />
-        <CardSpot className="goalSpot" />
+        <CardSpot
+          offset={3}
+          className="goalSpot joyrideGoals"
+          cardContainerColumns="goalSpotContainer"
+        />
+        <CardSpot
+          className="goalSpot"
+          cardContainerColumns="goalSpotContainer"
+        />
+        <CardSpot
+          className="goalSpot"
+          cardContainerColumns="goalSpotContainer"
+        />
+        <CardSpot
+          className="goalSpot"
+          cardContainerColumns="goalSpotContainer"
+        />
       </Row>
       <Row gutter={{ xs: 0, sm: 6, md: 8 }} align="middle" className="joyrideColumns">
         {/* Game Columns */}

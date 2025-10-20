@@ -8,7 +8,11 @@ import { Row } from "antd";
  */
 function GameTopRow() {
   return (
-    <Row gutter={{ xs: 0, sm: 6, md: 8 }} className="boardDeckRow" align="middle">
+    <Row
+      gutter={{ xs: 0, sm: 6, md: 8 }}
+      className="boardDeckRow items-center"
+      align="middle"
+    >
       <Deck />
       <GoalPileWrapper />
     </Row>

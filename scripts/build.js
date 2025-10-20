@@ -5,6 +5,10 @@ process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 // Fix OpenSSL EVP error with modern Node versions when using webpack 4
 process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS ? process.env.NODE_OPTIONS + ' ' : ''}--openssl-legacy-provider`;
+// Ensure invalid BROWSERSLIST env var doesn't break postcss/autoprefixer
+if (process.env.BROWSERSLIST) {
+  delete process.env.BROWSERSLIST;
+}
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will

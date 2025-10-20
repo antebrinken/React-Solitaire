@@ -1,5 +1,6 @@
 /* eslint-disable import/no-named-as-default */
 import "./styles/index.less";
+import "./styles/tailwind.css";
 import React, { memo } from "react";
 import { persistor, store } from "./redux/store";
 import BaseApplication from "./react/App/index";
