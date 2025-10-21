@@ -4,6 +4,8 @@ import { ExplicitAny } from "../../../global";
 
 interface CardFrameProps {
   onDoubleClick?: () => void; // function called when card is double clicked
+  onClick?: () => void; // optional single-click/tap handler
+  onTouchEnd?: () => void; // optional touch-end handler for tap
   cardContainerClassName?: string; // additional classname for the container
   cardContentClassName?: string; // additional classname for the content
   children?: ReactNode; // children
@@ -17,6 +19,8 @@ interface CardFrameProps {
 function CardFrame(
   {
     onDoubleClick,
+    onClick,
+    onTouchEnd,
     cardContainerClassName = "",
     cardContentClassName = "",
     shake,
@@ -31,7 +35,9 @@ function CardFrame(
       className={`cardContainer ${cardContainerClassName} ${
         shake ? "shakeAnimation" : ""
       } ${increase ? "increaseAnimation" : ""}`}
+      onClick={() => onClick !== undefined && onClick()}
       onDoubleClick={() => onDoubleClick !== undefined && onDoubleClick()}
+      onTouchEnd={() => onTouchEnd !== undefined && onTouchEnd()}
     >
       {/* eslint-disable-next-line react/forbid-dom-props */}
       <div className="cardAspectRatio">

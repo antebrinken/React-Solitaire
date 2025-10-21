@@ -4,6 +4,8 @@
   margin-top: 30px;
 }
 
+// (Removed old .ColumnPile* margin overrides; columns use #columnNPile + transforms below)
+
 .columnPile {
   width: 100%;
   height: 100%;
@@ -71,7 +73,8 @@
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
   .cardContainerColumns {
-    margin-top: 8px;
+    // Increase vertical fan-out on small screens so lower cards remain visible
+    margin-top: 12px;
   }
 
   .cardPile {
@@ -107,14 +110,14 @@
     #goal4Pile.flippedPile {
        margin-top: -61px !important;
     }
-    // Progressive left nudges per column (iPhone SE)
+    // Align stacks with spot placeholders (iPhone SE)
     #column1Pile .cardPileContainer { transform: translateX(0px) !important; }
     #column2Pile .cardPileContainer { transform: translateX(-1px) !important; }
-    #column3Pile .cardPileContainer { transform: translateX(-2px) !important; }
-    #column4Pile .cardPileContainer { transform: translateX(-3px) !important; }
+    #column3Pile .cardPileContainer { transform: translateX(0px) !important; }
+    #column4Pile .cardPileContainer { transform: translateX(-2px) !important; }
     #column5Pile .cardPileContainer { transform: translateX(-4px) !important; }
-    #column6Pile .cardPileContainer { transform: translateX(-5px) !important; }
-    #column7Pile .cardPileContainer { transform: translateX(-6px) !important; }
+    #column6Pile .cardPileContainer { transform: translateX(-6px) !important; }
+    #column7Pile .cardPileContainer { transform: translateX(-8px) !important; }
 
     // iPhone SE: move stacks 15px right and up 80px
     #goal1Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
@@ -123,12 +126,22 @@
     #goal4Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
 
     #flippedPile .cardPileContainer { transform: translateX(1px); }
+
+    // Per-column overrides to match spot placeholders (right shift in px)
+    #column1Pile .cardPileContainer { transform: translateX(3px) !important; }
+    #column2Pile .cardPileContainer { transform: translateX(6px) !important; }
+    #column3Pile .cardPileContainer { transform: translateX(8px) !important; }
+    #column4Pile .cardPileContainer { transform: translateX(10px) !important; }
+    #column5Pile .cardPileContainer { transform: translateX(11px) !important; }
+    #column6Pile .cardPileContainer { transform: translateX(13px) !important; }
+    #column7Pile .cardPileContainer { transform: translateX(15px) !important; }
   }
 }
 
 @media screen and (max-width: 375px) {
   .cardContainerColumns {
-    margin-top: 6px;
+    // Extra spacing on the smallest phones (e.g., iPhone SE)
+    margin-top: 14px;
   }
   .cardPile {
     bottom: 38px;

@@ -42,6 +42,8 @@
   max-width: 100%;
   max-height: 100%;
   margin-top: -1px;
+  /* Improve touch responsiveness on mobile (eliminate 300ms delay) */
+  touch-action: manipulation;
 }
 
 .cardAspectRatio {
@@ -137,6 +139,37 @@
   .goalSpotContainer {
     transform: translate(-5px, 0px);
   }
+
+  // Align empty column spot placeholders with column piles on iPhone SE
+  // Keep this active up to 375px wide (SE 1st/2nd gen widths)
+  .joyrideColumns {
+    // Keep base layout
+  }
+  // Avoid double transforms: keep columns at base position; adjust only the .cardSpot below
+  .joyrideColumns .cardSpotCol:nth-child(1) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(2) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(3) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(4) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(5) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(6) { transform: translateX(0px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(7) { transform: translateX(0px) !important; }
+
+  // Also nudge the visible spot box itself so the border aligns exactly
+  .joyrideColumns .cardSpotCol:nth-child(1) .cardSpot { transform: translateX(3px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(2) .cardSpot { transform: translateX(6px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(3) .cardSpot { transform: translateX(8px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(4) .cardSpot { transform: translateX(10px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(5) .cardSpot { transform: translateX(11px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(6) .cardSpot { transform: translateX(13px) !important; }
+  .joyrideColumns .cardSpotCol:nth-child(7) .cardSpot { transform: translateX(15px) !important; }
+
+  // Extra-specific path to ensure override wins if anything else sets transforms
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(2) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(6px) !important; }
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(3) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(8px) !important; }
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(4) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(10px) !important; }
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(5) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(11px) !important; }
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(6) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(13px) !important; }
+  .ant-row.joyrideColumns .ant-col.cardSpotCol:nth-child(7) .cardContainer .cardAspectRatio .cardContent.cardSpot { transform: translateX(15px) !important; }
 }
 
 @media screen and (min-width: 376px) and (max-width: 767px) {

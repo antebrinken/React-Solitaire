@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-component-props */
 /* eslint-disable indent */
 import { ExplicitAny, RootReducerState } from "../../../../global";
-import React, { PropsWithChildren, memo, useEffect } from "react";
+import React, { PropsWithChildren, memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardFrame from "../../Cards/CardFrame.component";
 import CardImage from "../../Cards/CardImage.component";
@@ -17,6 +17,8 @@ interface DraggableCardProps {
   card: CardType; // card info
   nCards: number; // number of cards being dragged (this card and all bellow)
   onDoubleClick?: () => void; // function called when card is double clicked
+  onClick?: () => void; // optional tap/single-click handler
+  onTouchEnd?: () => void; // optional touch-end handler
   index?: number;
   shake?: boolean;
 }
@@ -28,11 +30,33 @@ function DraggableCard({
   card,
   nCards,
   onDoubleClick,
+  onClick,
+  onTouchEnd,
   index = 0,
   shake,
   children
 }: PropsWithChildren<DraggableCardProps>) {
   const dispatch = useDispatch();
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
+
+  // Track small screens to avoid hiding entire stacks during accidental taps/drag
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mql = window.matchMedia("(max-width: 575px)");
+    const update = () => setIsSmallScreen(mql.matches);
+    update();
+    if (mql.addEventListener) {
+      mql.addEventListener("change", update);
+      return () => mql.removeEventListener("change", update);
+    } else {
+      // @ts-ignore legacy Safari
+      mql.addListener(update);
+      return () => {
+        // @ts-ignore
+        mql.removeListener(update);
+      };
+    }
+  }, []);
 
   // get the cards that are dragging from the redux (can be from the deck or form the columns)
   const { cardDragging } = useSelector(
@@ -102,13 +126,20 @@ function DraggableCard({
   const isInDragging = (cardDragging || []).some((c: CardType) => c && c.id === card.id);
   // Do not hide the source card when dragging from the flipped (trash) pile.
   // Hiding it interferes with double-click recognition and can appear as a disappearance on click-hold.
-  const hideCard = card.cardField === "deckPile" ? false : isDragging || isInDragging;
+  // On small screens, only hide the DOM element actually being dragged to avoid stacks "disappearing"
+  const hideCard = card.cardField === "deckPile"
+    ? false
+    : isSmallScreen
+      ? isDragging
+      : (isDragging || isInDragging);
 
   // return the card component with the ref of the drag event
   return (
     <CardFrame
       ref={drag}
       onDoubleClick={onDoubleClick}
+      onClick={onClick}
+      onTouchEnd={onTouchEnd}
       cardContainerClassName={`${index > 0 ? "cardContainerColumns" : ""}`}
       shake={shake}
     >
