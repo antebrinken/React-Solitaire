@@ -90,12 +90,9 @@ function GameBoard() {
    * And either creates a new random game or resumes a previously saved game
    */
   const mountGameBoard = () => {
-    // Ensure no orientation modal is shown; allow portrait play
+    // Ensure no orientation/confirm modal is shown; allow portrait play
     dispatch(gameBoardActions.showingConfirm(false));
     dispatch(pageActions.setConfirmationModal("", "", undefined, undefined));
-    if (history.action === "POP") {
-      history.push("/");
-    }
 
     // set this refs at the redux
     dispatch(deckActions.setRefs(deckRef, flippedRef));
@@ -105,16 +102,14 @@ function GameBoard() {
 
     // if nothing was sent through the location state, then create a new game
     if (!location.state) {
-      if (history.action !== "POP") {
-        if (hasSavedGame) {
-          // if there was a saved game and the user started a new one, should count has a lost
-          dispatch(userActions.addGame());
-          // remove saved game from user settings
-          dispatch(userActions.clearSavedGame());
-        }
-        // create new deck
-        dispatch(gameBoardActions.createGame());
+      if (hasSavedGame) {
+        // if there was a saved game and the user started a new one, should count as a lost
+        dispatch(userActions.addGame());
+        // remove saved game from user settings
+        dispatch(userActions.clearSavedGame());
       }
+      // create new deck
+      dispatch(gameBoardActions.createGame());
     } // if the location state is defined
     else {
       // add game to the user counting
@@ -141,7 +136,7 @@ function GameBoard() {
    */
   const setNewGamePiles = () => {
     // this is only done when a new game is created!
-    if (!location.state && history.action !== "POP") {
+    if (!location.state) {
       // set the initial deck
       dispatch(deckActions.setInitialDeck(deckPile, flippedPile));
       // set the initial columns
