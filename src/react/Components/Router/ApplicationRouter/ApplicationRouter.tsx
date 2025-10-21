@@ -22,9 +22,6 @@ const ScoresPage = React.lazy(() =>
 const SignUpPage = React.lazy(() =>
   import("../../../Pages/SignUpPage/SignUpPage.component")
 );
-const StartingPage = React.lazy(() =>
-  import("../../../Pages/StartingPage/StartingPage.component")
-);
 const StatisticsPage = React.lazy(() =>
   import("../../../Pages/StatisticsPage/StatisticsPage.component")
 );
@@ -40,10 +37,10 @@ function ApplicationRouter() {
 
   return (
     <Switch>
-      {/* Starting Page */}
+      {/* Default Route -> Game Page */}
       <Route exact path={`${url}/`}>
         <Suspense fallback={<div>Loading...</div>}>
-          <StartingPage />
+          <GameBoard />
         </Suspense>
       </Route>
       <Route exact path={`${url}/login`}>

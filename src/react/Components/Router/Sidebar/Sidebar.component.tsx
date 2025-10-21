@@ -27,7 +27,9 @@ function Sidebar() {
     loggedIn: User.loggedIn
   }));
 
-  return location.pathname !== "/game" ? (
+  // Hide the sidebar while playing the game (at "/" or "/game")
+  const isGamePath = location.pathname === "/" || location.pathname.startsWith("/game");
+  return !isGamePath ? (
     <Sider className="sidebar" trigger={null} collapsible collapsed={collapsed}>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
         <Item

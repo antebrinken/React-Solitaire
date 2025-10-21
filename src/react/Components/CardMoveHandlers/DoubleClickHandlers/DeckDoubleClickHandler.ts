@@ -48,6 +48,8 @@ class DeckDoubleClickHandler {
           cards: [this.card]
         })
       );
+      // Clear goal double-click target so subsequent moves can re-trigger
+      this.dispatch(goalActions.resetCardDragging());
       // sets the move as over
       return true;
     }
@@ -81,6 +83,8 @@ class DeckDoubleClickHandler {
           cards: [this.card]
         })
       );
+      // Clear goal state in case it was set by previous checks
+      this.dispatch(goalActions.resetCardDragging());
     }
     // sets the move as over
     return true;
