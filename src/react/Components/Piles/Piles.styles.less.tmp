@@ -82,8 +82,31 @@
     margin-top: -102px;
   }
 
+  // Goal piles were reusing the flippedPile class on their container.
+  // Neutralize its negative margin on small screens so goal stacks don't sit far below their spots.
+  #goal1Pile.flippedPile,
+  #goal2Pile.flippedPile,
+  #goal3Pile.flippedPile,
+  #goal4Pile.flippedPile {
+    // move goal containers down by 25px relative to flipped baseline
+    // was -92px; now -77px to shift further down
+    margin-top: -77px !important;
+    // do not shift container horizontally; use inner stack transforms instead
+    margin-left: 0 !important;
+    // move the entire goal container 15px to the right without affecting flow
+    transform: translateX(32px) !important;
+    will-change: transform;
+  }
+
   // On very small screens (e.g., iPhone SE), reduce horizontal nudges
   @media screen and (max-width: 375px) {
+    // On very small phones, move goals down by 25px relative to flipped baseline
+    #goal1Pile.flippedPile,
+    #goal2Pile.flippedPile,
+    #goal3Pile.flippedPile,
+    #goal4Pile.flippedPile {
+      margin-top: -61px !important;
+    }
     #column1Pile .cardPileContainer { transform: translateX(1px); }
     #column2Pile .cardPileContainer { transform: translateX(2px); }
     #column3Pile .cardPileContainer { transform: translateX(3px); }
@@ -92,11 +115,11 @@
     #column6Pile .cardPileContainer { transform: translateX(6px); }
     #column7Pile .cardPileContainer { transform: translateX(7px); }
 
-    // iPhone SE: shift all goal stacks left 5px and up 10px
-    #goal1Pile .cardPileContainer { transform: translate(-5px, -10px); }
-    #goal2Pile .cardPileContainer { transform: translate(-5px, -10px); }
-    #goal3Pile .cardPileContainer { transform: translate(-5px, -10px); }
-    #goal4Pile .cardPileContainer { transform: translate(-5px, -10px); }
+    // iPhone SE: move stacks 15px right and up 80px
+    #goal1Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
+    #goal2Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
+    #goal3Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
+    #goal4Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
 
     #flippedPile .cardPileContainer { transform: translateX(1px); }
   }
@@ -114,3 +137,11 @@
   }
 }
 
+
+
+@media screen and (min-width: 376px) and (max-width: 767px) {
+  #goal1Pile .cardPileContainer { transform: translate(15px, -30px); }
+  #goal2Pile .cardPileContainer { transform: translate(15px, -30px); }
+  #goal3Pile .cardPileContainer { transform: translate(15px, -30px); }
+  #goal4Pile .cardPileContainer { transform: translate(15px, -30px); }
+}

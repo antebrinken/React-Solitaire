@@ -133,9 +133,9 @@
   .cardContent {
     margin: 2px;
   }
-  // Shift the goal spot container (placeholder) up and left on very small screens
+  // Align goal spot container (placeholder) with goal stacks on iPhone SE
   .goalSpotContainer {
-    transform: translate(-5px, -10px);
+    transform: translate(-5px, 0px);
   }
 }
 
@@ -146,6 +146,10 @@
   }
   .cardContent {
     margin: 3px;
+  }
+  // Align goal spot container for slightly larger phones
+  .goalSpotContainer {
+    transform: translate(15px, -30px);
   }
 }
 
