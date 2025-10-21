@@ -23,6 +23,28 @@ function DoubleClickHandler({
   children
 }: PropsWithChildren<DoubleClickHandlerProps>) {
   const [handlingMove, setHandlingMove] = useState<boolean>();
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
+  const [recentTouch, setRecentTouch] = useState<boolean>(false);
+
+  // Detect small screens (and desktop responsive mode) to map double-click to tap/single-click
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mql = window.matchMedia("(max-width: 575px)");
+    const update = () => setIsSmallScreen(mql.matches);
+    update();
+    if (mql.addEventListener) {
+      mql.addEventListener("change", update);
+      return () => mql.removeEventListener("change", update);
+    } else {
+      // Safari/older
+      // @ts-ignore
+      mql.addListener(update);
+      return () => {
+        // @ts-ignore
+        mql.removeListener(update);
+      };
+    }
+  }, []);
 
   const {
     goalMoveTarget,
@@ -30,14 +52,26 @@ function DoubleClickHandler({
     columnMoveCards,
     movementWithFlip,
     hintSource,
-    columns
-  } = useSelector(({ Goal, Columns }: RootReducerState) => ({
+    columns,
+    deckDragging,
+    goalDragging,
+    columnDragging,
+    deckUndoAnim,
+    deckRedoAnim,
+    deckRedoResetAnim
+  } = useSelector(({ Goal, Columns, Deck }: RootReducerState) => ({
     goalMoveTarget: Goal.doubleClickTarget,
     columnMoveTarget: Columns.doubleClickTarget,
     columnMoveCards: Columns.movingCards,
     columns: Columns.columns,
     movementWithFlip: Columns.movementWithFlip,
-    hintSource: Goal.hintSource || Columns.hintSource
+    hintSource: Goal.hintSource || Columns.hintSource,
+    deckDragging: Deck.cardDragging,
+    goalDragging: Goal.cardDragging,
+    columnDragging: Columns.cardDragging,
+    deckUndoAnim: Deck.startUndoAnimation,
+    deckRedoAnim: Deck.startRedoAnimation,
+    deckRedoResetAnim: Deck.startRedoResetAnimation
   }));
 
   // call the first handler of the double click when the handling move changes to true
@@ -83,8 +117,29 @@ function DoubleClickHandler({
   return (
     <>
       {Children.map(children, (child: ExplicitAny) => {
+        // Always use single click/tap; guard against drag/animation and duplicate touch+click
+        const draggingActive = Boolean(
+          (deckDragging && deckDragging.length) ||
+          (goalDragging && goalDragging.length) ||
+          (columnDragging && columnDragging.length)
+        );
+        const deckAnimActive = Boolean(deckUndoAnim || deckRedoAnim || deckRedoResetAnim);
+
+        const onTapClick = () => {
+          if (recentTouch) return; // ignore synthetic click after touch
+          if (draggingActive || deckAnimActive) return; // ignore while dragging/animating
+          handleDoubleClick();
+        };
+        const onTapTouchEnd = () => {
+          setRecentTouch(true);
+          if (!draggingActive && !deckAnimActive) handleDoubleClick();
+          setTimeout(() => setRecentTouch(false), 300);
+        };
+
         return cloneElement(child, {
-          [doubleClick ? "onDoubleClick" : "onClick"]: () => handleDoubleClick()
+          onClick: onTapClick,
+          onTouchEnd: onTapTouchEnd,
+          onDoubleClick: undefined
         });
       })}
     </>
