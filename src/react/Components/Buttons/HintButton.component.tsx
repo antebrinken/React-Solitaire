@@ -34,11 +34,11 @@ function HintButton() {
   // create the hint handler
   const handler = new HintHandler(
     dispatch,
-    columns,
-    goals,
+    columns || {},
+    goals || {},
     deckPile,
     flippedCopy.reverse(),
-    gameHints
+    (gameHints || []) as Array<Record<string, string>>
   );
   // return the button with the double click handler and wrapped in a badge with the current number of hints given
   return (

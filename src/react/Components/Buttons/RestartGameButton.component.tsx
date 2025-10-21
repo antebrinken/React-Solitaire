@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import React from "react";
 import { RedoOutlined } from "@ant-design/icons";
-import { RootReducerState } from "../../../global";
+import { RootReducerState, ExplicitAny } from "../../../global";
 import { Tooltip } from "antd";
 import columnsActions from "../../../redux/columns/columns.actions";
 import deckActions from "../../../redux/deck/deck.actions";
@@ -30,21 +30,39 @@ function RestartGameButton() {
     goal3Pile,
     goal4Pile,
     gameMoves
-  } = useSelector(({ GameBoard }: RootReducerState) => ({
-    deckPile: GameBoard.deckPile,
-    flippedPile: GameBoard.flippedPile,
-    column1Pile: GameBoard.column1Pile,
-    column2Pile: GameBoard.column2Pile,
-    column3Pile: GameBoard.column3Pile,
-    column4Pile: GameBoard.column4Pile,
-    column5Pile: GameBoard.column5Pile,
-    column6Pile: GameBoard.column6Pile,
-    column7Pile: GameBoard.column7Pile,
-    goal1Pile: GameBoard.goal1Pile,
-    goal2Pile: GameBoard.goal2Pile,
-    goal3Pile: GameBoard.goal3Pile,
-    goal4Pile: GameBoard.goal4Pile,
-    gameMoves: GameBoard.gameMoves
+  } = useSelector<
+    RootReducerState,
+    {
+      deckPile: ExplicitAny[];
+      flippedPile: ExplicitAny[];
+      column1Pile: ExplicitAny[];
+      column2Pile: ExplicitAny[];
+      column3Pile: ExplicitAny[];
+      column4Pile: ExplicitAny[];
+      column5Pile: ExplicitAny[];
+      column6Pile: ExplicitAny[];
+      column7Pile: ExplicitAny[];
+      goal1Pile: ExplicitAny[];
+      goal2Pile: ExplicitAny[];
+      goal3Pile: ExplicitAny[];
+      goal4Pile: ExplicitAny[];
+      gameMoves: number;
+    }
+  >(({ GameBoard, Deck }: RootReducerState) => ({
+    deckPile: Deck.deckPile,
+    flippedPile: Deck.flippedPile,
+    column1Pile: (GameBoard as ExplicitAny).column1Pile,
+    column2Pile: (GameBoard as ExplicitAny).column2Pile,
+    column3Pile: (GameBoard as ExplicitAny).column3Pile,
+    column4Pile: (GameBoard as ExplicitAny).column4Pile,
+    column5Pile: (GameBoard as ExplicitAny).column5Pile,
+    column6Pile: (GameBoard as ExplicitAny).column6Pile,
+    column7Pile: (GameBoard as ExplicitAny).column7Pile,
+    goal1Pile: (GameBoard as ExplicitAny).goal1Pile,
+    goal2Pile: (GameBoard as ExplicitAny).goal2Pile,
+    goal3Pile: (GameBoard as ExplicitAny).goal3Pile,
+    goal4Pile: (GameBoard as ExplicitAny).goal4Pile,
+    gameMoves: (GameBoard as ExplicitAny).gameMoves
   }));
 
   // distribute the decks created to the right redux

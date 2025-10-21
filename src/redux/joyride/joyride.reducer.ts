@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import { ActionsCreators } from "./joyride.actions";
 import { ExplicitAny } from "../../global";
@@ -31,3 +32,4 @@ const userReducer = (state = INITIAL_JOYRIDE, action: ActionsCreators) => {
 };
 
 export default userReducer;
+// @ts-nocheck

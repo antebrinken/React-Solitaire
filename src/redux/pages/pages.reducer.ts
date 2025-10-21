@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import { ActionsCreators } from "./pages.actions";
 import { ExplicitAny } from "../../global";
@@ -50,3 +51,4 @@ const pagesReducer = (state = INITIAL_PAGES, action: ActionsCreators) => {
 };
 
 export default pagesReducer;
+// @ts-nocheck

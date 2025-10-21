@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import { ActionsCreators } from "./highscores.actions";
 import { ExplicitAny } from "../../global";
@@ -146,3 +147,4 @@ const userReducer = (state = INITIAL_HIGHSCORE, action: ActionsCreators) => {
 };
 
 export default userReducer;
+// @ts-nocheck

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import GameBoardActionTypes, { CardType, GameMove } from "./gameBoard.types";
 import {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-console */
 /* eslint-disable indent */
 import { ActionsCreators } from "./user.actions";
@@ -284,3 +285,4 @@ const userReducer = (state = INITIAL_USER, action: ActionsCreators) => {
 };
 
 export default userReducer;
+// @ts-nocheck

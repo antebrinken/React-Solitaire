@@ -61,7 +61,7 @@ function RedoButton() {
               target,
               source,
               cards.length,
-              movementWithFlip,
+              Boolean(movementWithFlip),
               true
             )
           );
@@ -71,7 +71,7 @@ function RedoButton() {
             columnsActions.removeNCardsFromColumn(
               source,
               cards.length,
-              movementWithFlip
+              Boolean(movementWithFlip)
             )
           );
           // add removed card to the corresponding goal

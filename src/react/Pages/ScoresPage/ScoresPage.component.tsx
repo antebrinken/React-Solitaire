@@ -34,7 +34,9 @@ function ScoresPage({ activeTab }: ScoresPageProps) {
    * Starts the joyride
    */
   const initJoyride = () => {
-    dispatch(joyrideActions.initJoyride("scores", JoyrideSteps({ loggedIn })));
+    dispatch(
+      joyrideActions.initJoyride("scores", JoyrideSteps({ loggedIn: Boolean(loggedIn) }))
+    );
   };
   useEffect(initJoyride, []);
 

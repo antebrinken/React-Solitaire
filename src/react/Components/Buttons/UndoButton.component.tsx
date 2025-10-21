@@ -53,7 +53,7 @@ function UndoButton() {
             columnsActions.removeNCardsFromColumn(
               target,
               cards.length,
-              movementWithFlip
+              Boolean(movementWithFlip)
             )
           );
           // then add it to the flipped pile
@@ -93,7 +93,7 @@ function UndoButton() {
           // column pile -> goal pile
           // call goal function to remove card from the repective column pile
           dispatch(
-            columnsActions.removeNCardsFromColumn(target, 1, movementWithFlip)
+            columnsActions.removeNCardsFromColumn(target, 1, Boolean(movementWithFlip))
           );
           // add removed card to the corresponding goal
           dispatch(goalActions.addCardToGoal(source, cards[0]));

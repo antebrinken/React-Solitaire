@@ -23,15 +23,16 @@ function BaseJoyride() {
   );
 
   const handlePageChange = () => {
-    if (
-      (location?.pathname.includes(page) ||
+  if (
+      (location?.pathname.includes(page || "") ||
         (location?.pathname === "/" && page === "main") ||
         (location?.pathname === "/game" && page === "gameOptions")) &&
+      page &&
       joyride &&
-      joyride[page]
+      joyride[page as string]
     ) {
       const joyrideCopy = { ...joyride };
-      joyrideCopy[page] = false;
+      joyrideCopy[page as string] = false;
       setRun(true);
       dispatch(userActions.setJoyride(joyrideCopy));
     }

@@ -23,28 +23,7 @@ function DoubleClickHandler({
   children
 }: PropsWithChildren<DoubleClickHandlerProps>) {
   const [handlingMove, setHandlingMove] = useState<boolean>();
-  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
   const [recentTouch, setRecentTouch] = useState<boolean>(false);
-
-  // Detect small screens (and desktop responsive mode) to map double-click to tap/single-click
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mql = window.matchMedia("(max-width: 575px)");
-    const update = () => setIsSmallScreen(mql.matches);
-    update();
-    if (mql.addEventListener) {
-      mql.addEventListener("change", update);
-      return () => mql.removeEventListener("change", update);
-    } else {
-      // Safari/older
-      // @ts-ignore
-      mql.addListener(update);
-      return () => {
-        // @ts-ignore
-        mql.removeListener(update);
-      };
-    }
-  }, []);
 
   const {
     goalMoveTarget,

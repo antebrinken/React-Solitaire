@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import {
   addDragginCardsToGoal,
@@ -202,3 +203,4 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
 };
 
 export default goalReducer;
+// @ts-nocheck

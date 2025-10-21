@@ -6,10 +6,10 @@ import {
   GameTopRow
 } from "../../Components/BoardFields/BoardFields.items";
 import { ExplicitAny, RootReducerState } from "../../../global";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ConfirmationModal from "../../Components/Modals/ConfirmationModal.component";
 import CustomDragLayer from "../../Components/CardMoveHandlers/DragHandlers/CustomDragLayer.component";
 import DropHandler from "../../Components/CardMoveHandlers/DropHandlers/DropHandler.component";
@@ -17,7 +17,6 @@ import GameOverModal from "../../Components/Modals/GameOverModal.component";
 import JoyrideSteps from "./JoyrideSteps.component";
 import AutoCompleter from "../../Components/AutoCompleter/AutoCompleter.component";
 import { Prompt } from "react-router";
-import { RedoOutlined } from "@ant-design/icons";
 import columnsActions from "../../../redux/columns/columns.actions";
 import deckActions from "../../../redux/deck/deck.actions";
 import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
@@ -29,7 +28,6 @@ import userActions from "../../../redux/user/user.actions";
 function GameBoard() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
   const intl = useIntl();
 
   // create refs for the deck and flipped piles
@@ -57,23 +55,23 @@ function GameBoard() {
     hasSavedGame,
     savedGame
   } = useSelector(({ GameBoard, Goal, User, Pages }: RootReducerState) => ({
-    gameMoves: GameBoard.gameMoves,
+    gameMoves: (GameBoard as ExplicitAny).gameMoves,
     gameOver: Goal.gameOver,
-    deckPile: GameBoard.deckPile,
-    flippedPile: GameBoard.flippedPile,
-    column1Pile: GameBoard.column1Pile,
-    column2Pile: GameBoard.column2Pile,
-    column3Pile: GameBoard.column3Pile,
-    column4Pile: GameBoard.column4Pile,
-    column5Pile: GameBoard.column5Pile,
-    column6Pile: GameBoard.column6Pile,
-    column7Pile: GameBoard.column7Pile,
-    goal1Pile: GameBoard.goal1Pile,
-    goal2Pile: GameBoard.goal2Pile,
-    goal3Pile: GameBoard.goal3Pile,
-    goal4Pile: GameBoard.goal4Pile,
+    deckPile: (GameBoard as ExplicitAny).deckPile,
+    flippedPile: (GameBoard as ExplicitAny).flippedPile,
+    column1Pile: (GameBoard as ExplicitAny).column1Pile,
+    column2Pile: (GameBoard as ExplicitAny).column2Pile,
+    column3Pile: (GameBoard as ExplicitAny).column3Pile,
+    column4Pile: (GameBoard as ExplicitAny).column4Pile,
+    column5Pile: (GameBoard as ExplicitAny).column5Pile,
+    column6Pile: (GameBoard as ExplicitAny).column6Pile,
+    column7Pile: (GameBoard as ExplicitAny).column7Pile,
+    goal1Pile: (GameBoard as ExplicitAny).goal1Pile,
+    goal2Pile: (GameBoard as ExplicitAny).goal2Pile,
+    goal3Pile: (GameBoard as ExplicitAny).goal3Pile,
+    goal4Pile: (GameBoard as ExplicitAny).goal4Pile,
     showingConfirm:
-      GameBoard.showingConfirm &&
+      (GameBoard as ExplicitAny).showingConfirm &&
       (Pages.confirmationModalProps.message1 !== "" ||
         Pages.confirmationModalProps.buttonConfirmId),
     hasSavedGame: User.user.hasSavedGame,
