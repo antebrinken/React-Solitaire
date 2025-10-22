@@ -10,6 +10,7 @@ const UserActionTypes = {
   SET_JOYRIDE: "USER/SET_JOYRIDE",
   CLEAR_USER: "USER/CLEAR_USER",
   RESET_USER_REF: "USER/RESET_USER_REF"
-};
+} as const;
 
 export default UserActionTypes;
+export type UserActionType = typeof UserActionTypes[keyof typeof UserActionTypes];

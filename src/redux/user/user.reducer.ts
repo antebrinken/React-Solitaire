@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable no-console */
 /* eslint-disable indent */
 import { ActionsCreators } from "./user.actions";

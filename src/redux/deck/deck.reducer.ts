@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import { CardType, cardsConfigurations } from "../gameBoard/gameBoard.types";
 import {
@@ -228,4 +227,3 @@ const deckReducer = (state = INITIAL_DECK, action: ActionsCreators) => {
 };
 
 export default deckReducer;
-// @ts-nocheck

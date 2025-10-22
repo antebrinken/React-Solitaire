@@ -15,6 +15,7 @@ const ColumnsActionTypes = {
     "COLUMNS/CHECK_COLUM_SWAP_DOUBLE_CLICK_VALID",
   SWAP_DOUBLE_CLICK: "COLUMNS/SWAP_DOUBLE_CLICK",
   CHECK_MOVE_FROM_ANY_COLUMN: "COLUMNS/CHECK_MOVE_FROM_ANY_COLUMN"
-};
+} as const;
 
 export default ColumnsActionTypes;
+export type ColumnsActionType = typeof ColumnsActionTypes[keyof typeof ColumnsActionTypes];

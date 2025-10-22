@@ -1,14 +1,15 @@
 import { ExplicitAny, RootReducerState } from "../../global";
 import { Layout, Spin } from "antd";
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ApplicationRouter from "../Components/Router/ApplicationRouter/ApplicationRouter";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import Joyride from "../HocWrappers/Joyride/Joyride.component";
 import Sidebar from "../Components/Router/Sidebar/Sidebar.component";
 import { auth } from "../../firebase/firebase.utils";
 import { setUserRedux } from "../Components/Forms/helper";
+
+const Joyride = lazy(() => import("../HocWrappers/Joyride/Joyride.component"));
 
 const { Content } = Layout;
 
@@ -33,7 +34,9 @@ function BaseApplication() {
       <Layout className="appLayout">
         <Content className="appContent">
           <DndProvider backend={HTML5Backend as ExplicitAny}>
-            <Joyride />
+            <Suspense fallback={null}>
+              <Joyride />
+            </Suspense>
             <ApplicationRouter />
           </DndProvider>
         </Content>

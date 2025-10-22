@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import {
   addCardToColumn,
@@ -67,14 +66,14 @@ const columnsReducer = (state = INITIAL_COLUMNS, action: ActionsCreators) => {
   switch (action.type) {
     case ColumnsActionTypes.SET_INITIAL_COLUMNS:
       return {
-        columns: createColumns((action as any).columns, (action as any).keepFlipped),
+        columns: createColumns(action.columns, action.keepFlipped),
         cardDragging: undefined,
         cardDraggingCol: undefined,
         sendBack: undefined
       };
 
     case ColumnsActionTypes.SWAP_COLUMNS:
-      if (!action.finalId.includes(state.cardDraggingCol)) {
+      if (!action.finalId.includes(state.cardDraggingCol || "")) {
         const resultSwap = swapColumns(
           state.columns,
           state.cardDragging,

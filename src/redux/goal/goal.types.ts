@@ -12,6 +12,7 @@ const GoalActionTypes = {
     "GOALS/CHECK_GOAL_SWAP_DOUBLE_CLICK_VALID",
   CHECK_DOUBLE_CLICK_VALID: "GOALS/CHECK_DOUBLE_CLICK_VALID",
   CHECK_MOVE_FROM_ANY_COLUMN: "GOALS/CHECK_MOVE_FROM_ANY_COLUMN"
-};
+} as const;
 
 export default GoalActionTypes;
+export type GoalActionType = typeof GoalActionTypes[keyof typeof GoalActionTypes];

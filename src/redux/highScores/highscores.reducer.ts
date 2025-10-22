@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import { ActionsCreators } from "./highscores.actions";
 import { ExplicitAny } from "../../global";

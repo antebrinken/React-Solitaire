@@ -5,6 +5,7 @@ const HighScoresActionTypes = {
   HAS_NEW_HIGHSCORE: "HIGHSCORES/HAS_NEW_HIGHSCORE",
   ADD_HIGHSCORE: "HIGHSCORES/ADD_HIGHSCORE",
   RESET_HIGHSCORES_REF: "HIGHSCORES/RESET_HIGHSCORES_REF"
-};
+} as const;
 
 export default HighScoresActionTypes;
+export type HighScoresActionType = typeof HighScoresActionTypes[keyof typeof HighScoresActionTypes];

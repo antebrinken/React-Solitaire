@@ -33,6 +33,7 @@ function GameBoard() {
   // create refs for the deck and flipped piles
   const deckRef: ExplicitAny = useRef();
   const flippedRef: ExplicitAny = useRef();
+  const initializedRef = useRef<boolean>(false);
 
   // get all necessary elements from redux
   const {
@@ -134,7 +135,7 @@ function GameBoard() {
    */
   const setNewGamePiles = () => {
     // this is only done when a new game is created!
-    if (!location.state) {
+    if (!location.state && !initializedRef.current) {
       // set the initial deck
       dispatch(deckActions.setInitialDeck(deckPile, flippedPile));
       // set the initial columns
@@ -158,6 +159,7 @@ function GameBoard() {
           goal4Pile
         })
       );
+      initializedRef.current = true;
     }
   };
   useEffect(setNewGamePiles, [deckPile]);

@@ -10,7 +10,7 @@ const GameBoardActionTypes = {
   ADD_GAME_MOVE: "GAME/ADD_GAME_MOVE",
   REMOVE_GAME_MOVE: "GAME/REMOVE_GAME_MOVE",
   RE_ADD_GAME_MOVE: "GAME/RE_ADD_GAME_MOVE"
-};
+} as const;
 
 // number of the initial cards of each field of the game
 export const cardsConfigurations = {
@@ -43,3 +43,4 @@ export interface GameMove {
 }
 
 export default GameBoardActionTypes;
+export type GameBoardActionType = typeof GameBoardActionTypes[keyof typeof GameBoardActionTypes];

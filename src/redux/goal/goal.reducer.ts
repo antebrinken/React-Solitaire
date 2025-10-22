@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import {
   addDragginCardsToGoal,
@@ -182,7 +181,7 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
     case GoalActionTypes.CHECK_GOAL_SWAP_DOUBLE_CLICK_VALID:
       const checkGoalSwapDoubleClickResult = checkGoalSwapDoubleClickValid(
         state.goals,
-        action.goalId,
+        action.sourceId,
         action.card,
         state.doubleClickTarget
       );
@@ -203,4 +202,3 @@ const goalReducer = (state = INITIAL_GOAL, action: ActionsCreators) => {
 };
 
 export default goalReducer;
-// @ts-nocheck

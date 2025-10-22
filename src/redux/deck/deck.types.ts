@@ -15,6 +15,7 @@ const DeckActionTypes = {
   START_UNDO_ANIMATION: "DECK/START_UNDO_ANIMATION",
   START_REDO_ANIMATION: "DECK/START_REDO_ANIMATION",
   START_REDO_RESET_ANIMATION: "DECK/START_REDO_RESET_ANIMATION"
-};
+} as const;
 
 export default DeckActionTypes;
+export type DeckActionType = typeof DeckActionTypes[keyof typeof DeckActionTypes];
