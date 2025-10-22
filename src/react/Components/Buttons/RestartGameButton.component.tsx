@@ -97,18 +97,22 @@ function RestartGameButton() {
   };
 
   const handleShowConfirm = () => {
-    if (gameMoves > 0) {
-      dispatch(gameBoardActions.showingConfirm(true));
-      dispatch(
-        pageActions.setConfirmationModal(
-          <FormattedMessage id="confirm.gameLostExit" />,
-          <FormattedMessage id="confirm.restart" />,
-          handleCancelConfirm,
-          restartGame,
-          "adjustToGameOptions"
-        )
-      );
+    // If there are no moves yet, there is nothing to lose: restart immediately
+    if (gameMoves === 0) {
+      restartGame();
+      return;
     }
+    // Otherwise, show confirmation before restarting
+    dispatch(gameBoardActions.showingConfirm(true));
+    dispatch(
+      pageActions.setConfirmationModal(
+        <FormattedMessage id="confirm.gameLostExit" />,
+        <FormattedMessage id="confirm.restart" />,
+        handleCancelConfirm,
+        restartGame,
+        "adjustToGameOptions"
+      )
+    );
   };
 
   const handleCancelConfirm = () => {

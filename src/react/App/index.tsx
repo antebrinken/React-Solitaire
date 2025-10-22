@@ -1,10 +1,9 @@
-import { ExplicitAny, RootReducerState } from "../../global";
+import { RootReducerState } from "../../global";
 import { Layout, Spin } from "antd";
 import React, { Suspense, lazy, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ApplicationRouter from "../Components/Router/ApplicationRouter/ApplicationRouter";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import DndKitProvider from "../DnD/DndKitProvider";
 import Sidebar from "../Components/Router/Sidebar/Sidebar.component";
 import { auth } from "../../firebase/firebase.utils";
 import { setUserRedux } from "../Components/Forms/helper";
@@ -33,12 +32,12 @@ function BaseApplication() {
       <Sidebar />
       <Layout className="appLayout">
         <Content className="appContent">
-          <DndProvider backend={HTML5Backend as ExplicitAny}>
+          <DndKitProvider>
             <Suspense fallback={null}>
               <Joyride />
             </Suspense>
             <ApplicationRouter />
-          </DndProvider>
+          </DndKitProvider>
         </Content>
       </Layout>
     </Layout>

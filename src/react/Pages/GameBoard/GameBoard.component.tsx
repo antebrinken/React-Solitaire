@@ -11,6 +11,7 @@ import {
   selectFlippedPileFromGameBoard,
   selectGameMoves,
   selectGameOver,
+  selectGameFlag,
   selectGoalsInitial,
   selectHasSavedGame,
   selectSavedGame,
@@ -22,7 +23,6 @@ import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import ConfirmationModal from "../../Components/Modals/ConfirmationModal.component";
-import CustomDragLayer from "../../Components/CardMoveHandlers/DragHandlers/CustomDragLayer.component";
 import DropHandler from "../../Components/CardMoveHandlers/DropHandlers/DropHandler.component";
 import GameOverModal from "../../Components/Modals/GameOverModal.component";
 import JoyrideSteps from "./JoyrideSteps.component";
@@ -49,6 +49,7 @@ function GameBoard() {
   // get all necessary elements from redux
   const gameMoves = useSelector(selectGameMoves);
   const gameOver = useSelector(selectGameOver);
+  const gameFlag = useSelector(selectGameFlag);
   const deckPile = useSelector(selectDeckPileFromGameBoard);
   const flippedPile = useSelector(selectFlippedPileFromGameBoard);
   const columnsInitial = useSelector(selectColumnsInitial);
@@ -127,6 +128,11 @@ function GameBoard() {
   };
   useEffect(setNewGamePiles, [deckPile]);
 
+  // Whenever a new game is created (gameFlag toggles), allow re-initialization
+  useEffect(() => {
+    initializedRef.current = false;
+  }, [gameFlag]);
+
   /**
    * Triggered by the game moves
    * When a *new* game starts, it is only added to the users count when at least a move is done
@@ -169,8 +175,7 @@ function GameBoard() {
         <GameColumnWrapper />
         {/* game options buttons */}
         <GameOptions />
-        {/* preview of the card being dragged */}
-        <CustomDragLayer />
+        {/* Drag overlay handled globally by DndKitProvider */}
         {/* auto-complete once all columns are flipped */}
         <AutoCompleter />
       </DropHandler>

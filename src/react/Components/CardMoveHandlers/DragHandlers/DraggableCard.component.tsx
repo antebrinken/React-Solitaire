@@ -1,17 +1,24 @@
 /* eslint-disable react/forbid-component-props */
 /* eslint-disable indent */
-import { ExplicitAny, RootReducerState } from "../../../../global";
-import React, { PropsWithChildren, memo, useEffect, useState } from "react";
+/**
+ * DraggableCard (DnD Kit)
+ *
+ * Makes a card (or stack) draggable using DnD Kit's `useDraggable`.
+ * - Sends `{ card, nCards }` in the draggable `data` payload.
+ * - While dragging, renders the card face explicitly so it never shows the back.
+ * - Dispatches Redux "start dragging" based on the card origin (deck/column/goal).
+ * - The visual drag preview is handled by the global DragOverlay (see DndKitProvider).
+ */
+import { RootReducerState } from "../../../../global";
+import React, { PropsWithChildren, memo, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardFrame from "../../Cards/CardFrame.component";
 import CardImage from "../../Cards/CardImage.component";
 import { CardType } from "../../../../redux/gameBoard/gameBoard.types";
 import columnsActions from "../../../../redux/columns/columns.actions";
 import deckActions from "../../../../redux/deck/deck.actions";
-import { getEmptyImage } from "react-dnd-html5-backend";
 import goalActions from "../../../../redux/goal/goal.actions";
-import { useDrag } from "react-dnd";
-const type = "cardframe";
+import { useDraggable } from "@dnd-kit/core";
 
 interface DraggableCardProps {
   card: CardType; // card info
@@ -66,36 +73,14 @@ function DraggableCard({
     })
   );
 
-  // useDrag will be responsible for making an element draggable. It also expose, isDragging method to add any styles while dragging
-  const [{ isDragging }, drag, preview] = useDrag({
-    item: { type, card }, // item denotes the element type, unique identifier (id) and card info
-    begin: () => onDrag(card), // call the onDrag function when dragging begins
-    end: (_item: ExplicitAny, monitor: ExplicitAny) => {
-      // If drag was cancelled (no valid drop), clear any lingering dragging state
-      if (!monitor.didDrop()) {
-        switch (card.cardField) {
-          case "deckPile":
-            dispatch(deckActions.resetCardDragging());
-            break;
-          case "goal1Pile":
-          case "goal2Pile":
-          case "goal3Pile":
-          case "goal4Pile":
-            dispatch(goalActions.resetCardDragging());
-            break;
-          default:
-            // columns
-            dispatch(columnsActions.resetCardDragging());
-        }
-      }
-    },
-    collect: (monitor: ExplicitAny) => ({
-      isDragging: monitor.isDragging()
-    })
+  // DnD Kit draggable
+  const { isDragging, attributes, listeners, setNodeRef } = useDraggable({
+    id: `card-${card.id}`,
+    data: { card, nCards }
   });
 
   // function called when a card starts being dragged
-  const onDrag = (card: CardType) => {
+  const onDrag = useCallback((card: CardType) => {
     switch (card.cardField) {
       case "deckPile":
         dispatch(deckActions.dragFlippedCard());
@@ -111,15 +96,12 @@ function DraggableCard({
         // if it is a card from the columns, then call the column action that saves what is being dragged
         dispatch(columnsActions.dragColumnCards(card.cardField, nCards));
     }
-  };
+  }, [dispatch, nCards]);
 
-  // adds preview to the drag event
-  const getPreviewImage = () => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  };
-
-  // on component did mount, call the getPreviewImage function
-  useEffect(getPreviewImage, []);
+  // on drag start, dispatch dragging state so overlay can mirror cards
+  useEffect(() => {
+    if (isDragging) onDrag(card);
+  }, [isDragging, onDrag, card]);
 
   // Hide the source card while dragging, regardless of origin pile
   // Use id-based check to avoid reference mismatches causing duplicates
@@ -133,22 +115,37 @@ function DraggableCard({
       ? isDragging
       : (isDragging || isInDragging);
 
+  const containerClassName = `${index > 0 ? "cardContainerColumns" : ""} ${
+    isDragging ? "draggingHide" : ""
+  }`;
+
   // return the card component with the ref of the drag event
   return (
     <CardFrame
-      ref={drag}
+      ref={setNodeRef}
       onDoubleClick={onDoubleClick}
       onClick={onClick}
       onTouchEnd={onTouchEnd}
-      cardContainerClassName={`${index > 0 ? "cardContainerColumns" : ""}`}
+      cardContainerClassName={containerClassName}
       shake={shake}
+      {...listeners}
+      {...attributes}
     >
-      {children || (
+      {isDragging ? (
+        // Force showing the card FACE while dragging, even for flipped pile cards
         <CardImage
-          additionalClassName={hideCard ? "cardIsDragging" : ""}
+          additionalClassName={""}
           directory="CardsFaces"
           image={card.image}
         />
+      ) : (
+        children || (
+          <CardImage
+            additionalClassName={hideCard ? "cardIsDragging" : ""}
+            directory="CardsFaces"
+            image={card.image}
+          />
+        )
       )}
     </CardFrame>
   );

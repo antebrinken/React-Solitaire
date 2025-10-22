@@ -24,6 +24,7 @@ export const selectGoalsInitial = (state: RootReducerState): Record<string, Card
 });
 
 export const selectGameOver = (state: RootReducerState): boolean => state.Goal.gameOver;
+export const selectGameFlag = (state: RootReducerState): boolean => (state.GameBoard as any).gameFlag;
 export const selectDeckPileFromGameBoard = (state: RootReducerState): CardType[] => (state.GameBoard as any).deckPile;
 export const selectFlippedPileFromGameBoard = (state: RootReducerState): CardType[] => (state.GameBoard as any).flippedPile;
 export const selectGameHints = (state: RootReducerState): Array<Record<string, string>> => (state.GameBoard as any).gameHints;

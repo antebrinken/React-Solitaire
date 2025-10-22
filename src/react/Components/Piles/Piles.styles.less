@@ -48,16 +48,8 @@
   align-items: center; // center cards horizontally within column
 }
 
-// Fine alignment per column: nudge stacks slightly to the right
-// so they sit neatly within the visual column spots. The rightmost
-// column receives the largest nudge.
-#column1Pile .cardPileContainer { transform: translateX(2px); }
-#column2Pile .cardPileContainer { transform: translateX(4px); }
-#column3Pile .cardPileContainer { transform: translateX(6px); }
-#column4Pile .cardPileContainer { transform: translateX(8px); }
-#column5Pile .cardPileContainer { transform: translateX(10px); }
-#column6Pile .cardPileContainer { transform: translateX(12px); }
-#column7Pile .cardPileContainer { transform: translateX(14px); }
+// Revert per-column horizontal nudges; keep stacks centered within spots
+// (align-items: center on .cardPileContainer already centers cards)
 
 // Adjust goal piles alignment (slightly right, increasing to the right) and lift up by 5px
 #goal1Pile .cardPileContainer { transform: translate(8px, -5px); }
@@ -110,14 +102,6 @@
     #goal4Pile.flippedPile {
        margin-top: -61px !important;
     }
-    // Align stacks with spot placeholders (iPhone SE)
-    #column1Pile .cardPileContainer { transform: translateX(0px) !important; }
-    #column2Pile .cardPileContainer { transform: translateX(-1px) !important; }
-    #column3Pile .cardPileContainer { transform: translateX(0px) !important; }
-    #column4Pile .cardPileContainer { transform: translateX(-2px) !important; }
-    #column5Pile .cardPileContainer { transform: translateX(-4px) !important; }
-    #column6Pile .cardPileContainer { transform: translateX(-6px) !important; }
-    #column7Pile .cardPileContainer { transform: translateX(-8px) !important; }
 
     // iPhone SE: move stacks 15px right and up 80px
     #goal1Pile .cardPileContainer { transform: translate(15px, -80px) !important; }
@@ -127,14 +111,7 @@
 
     #flippedPile .cardPileContainer { transform: translateX(1px); }
 
-    // Per-column overrides to match spot placeholders (right shift in px)
-    #column1Pile .cardPileContainer { transform: translateX(3px) !important; }
-    #column2Pile .cardPileContainer { transform: translateX(6px) !important; }
-    #column3Pile .cardPileContainer { transform: translateX(8px) !important; }
-    #column4Pile .cardPileContainer { transform: translateX(10px) !important; }
-    #column5Pile .cardPileContainer { transform: translateX(11px) !important; }
-    #column6Pile .cardPileContainer { transform: translateX(13px) !important; }
-    #column7Pile .cardPileContainer { transform: translateX(15px) !important; }
+    // Remove device-specific per-column horizontal nudges; keep centered
   }
 }
 
@@ -154,14 +131,7 @@
 
 
 @media screen and (min-width: 376px) and (max-width: 767px) {
-  // Columns: nudge slightly left vs desktop base on medium-small phones
-  #column1Pile .cardPileContainer { transform: translateX(15px); }
-  #column2Pile .cardPileContainer { transform: translateX(0px); }
-  #column3Pile .cardPileContainer { transform: translateX(15px); }
-  #column4Pile .cardPileContainer { transform: translateX(6px); }
-  #column5Pile .cardPileContainer { transform: translateX(8px); }
-  #column6Pile .cardPileContainer { transform: translateX(10px); }
-  #column7Pile .cardPileContainer { transform: translateX(12px); }
+  // Revert per-column horizontal nudges on medium-small phones as well
 
   #goal1Pile .cardPileContainer { transform: translate(15px, -30px); }
   #goal2Pile .cardPileContainer { transform: translate(15px, -30px); }

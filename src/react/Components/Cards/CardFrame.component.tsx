@@ -25,7 +25,8 @@ function CardFrame(
     cardContentClassName = "",
     shake,
     increase,
-    children
+    children,
+    ...rest
   }: CardFrameProps,
   ref: ExplicitAny
 ) {
@@ -38,6 +39,7 @@ function CardFrame(
       onClick={() => onClick !== undefined && onClick()}
       onDoubleClick={() => onDoubleClick !== undefined && onDoubleClick()}
       onTouchEnd={() => onTouchEnd !== undefined && onTouchEnd()}
+      {...rest}
     >
       {/* eslint-disable-next-line react/forbid-dom-props */}
       <div className="cardAspectRatio">

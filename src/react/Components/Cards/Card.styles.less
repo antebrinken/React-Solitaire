@@ -44,7 +44,16 @@
   margin-top: -1px;
   /* Improve touch responsiveness on mobile (eliminate 300ms delay) */
   touch-action: manipulation;
+  will-change: transform;
 }
+
+// When dragging, hide the entire source container while preserving layout
+.draggingHide {
+  visibility: hidden;
+}
+
+// Drop target highlight
+/* removed droppable-over visuals and drag cursor to restore previous layout */
 
 .cardAspectRatio {
   padding-top: 142.85%;
@@ -202,5 +211,7 @@
 // ----------------------------------
 // DraggableCard
 .cardIsDragging {
+  // Hide the source card while dragging; the DragOverlay shows the moving card.
+  // This makes it look like the grabbed card itself is moving.
   opacity: 0;
 }

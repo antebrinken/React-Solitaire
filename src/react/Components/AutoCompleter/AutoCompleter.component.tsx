@@ -83,8 +83,8 @@ function AutoCompleter() {
             movementWithFlip: false
           })
         );
-        // give store/react a moment to propagate before next tick
-        await delay(50);
+        // allow redux/DOM to settle before next tick (slightly faster)
+        await delay(45);
         busyRef.current = false;
         return true;
       }
@@ -110,7 +110,7 @@ function AutoCompleter() {
             movementWithFlip: false
           })
         );
-        await delay(50);
+        await delay(45);
         busyRef.current = false;
         return true;
       }
@@ -119,7 +119,7 @@ function AutoCompleter() {
     // 3) If no immediate move, but deck has cards, flip one to flipped pile
     if (deckRef.current.length > 0) {
       dispatch(deckActions.flipDeckPile());
-      await delay(50);
+      await delay(45);
       busyRef.current = false;
       return true;
     }
@@ -135,8 +135,8 @@ function AutoCompleter() {
           cards: []
         })
       );
-      // wait for animation duration before next attempt
-      await delay(650);
+      // wait for animation duration before next attempt (slightly faster)
+      await delay(600);
       busyRef.current = false;
       return true;
     }
@@ -156,7 +156,7 @@ function AutoCompleter() {
     if (!shouldRun) return;
 
     // Fast-paced, one move per tick. Increase delay if needed for smoother animations.
-    const TICK_MS = 120;
+    const TICK_MS = 100;
     intervalIdRef.current = window.setInterval(() => {
       // pause if state no longer valid
       if (!allColumnsFlipped || gameOverRef.current || draggingRef.current) {
