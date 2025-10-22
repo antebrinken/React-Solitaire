@@ -6,6 +6,14 @@ import DeckDoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/Deck
 import DoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/DoubleClickHandler.component";
 import { DraggableCard } from "../Cards/Cards.items";
 import { RootReducerState } from "../../../global";
+import {
+  selectDeckPile,
+  selectDeckStartUndoAnimation,
+  selectDeckTranslationX,
+  selectDeckTranslationY,
+  selectFlippedPile
+} from "../../../redux/selectors/deck.selectors";
+import { selectLastHint } from "../../../redux/selectors/derived.selectors";
 import SimplePile from "./SimplePile.component";
 
 /**
@@ -21,18 +29,14 @@ function FlippedPile() {
     startUndoAnimation,
     translationX,
     translationY
-  } = useSelector(({ Deck, GameBoard }: RootReducerState) => {
-    const gameHints = GameBoard.gameHints;
-    const lastIndex = gameHints.length - 1;
-    return {
-      deckPile: Deck.deckPile,
-      flippedPile: Deck.flippedPile,
-      lastHint: lastIndex >= 0 ? gameHints[lastIndex] : undefined,
-      startUndoAnimation: Deck.startUndoAnimation,
-      translationX: -Deck.translationX,
-      translationY: -Deck.translationY - 1
-    };
-  });
+  } = useSelector((state: RootReducerState) => ({
+    deckPile: selectDeckPile(state),
+    flippedPile: selectFlippedPile(state),
+    lastHint: selectLastHint(state),
+    startUndoAnimation: selectDeckStartUndoAnimation(state),
+    translationX: -selectDeckTranslationX(state),
+    translationY: -selectDeckTranslationY(state) - 1
+  }));
 
   const animationStyle = {
     transform: `translate(${translationX}px, ${

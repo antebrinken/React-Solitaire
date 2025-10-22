@@ -8,6 +8,10 @@ import React, {
   useState
 } from "react";
 import { useSelector } from "react-redux";
+import { selectColumns, selectColumnsDoubleClickTarget, selectColumnsMovementWithFlip, selectColumnsMovingCards } from "../../../../redux/selectors/columns.selectors";
+import { selectGoalDoubleClickTarget, selectGoalHintSource } from "../../../../redux/selectors/goal.selectors";
+// deck dragging factored into derived selector
+import { selectDeckAnimActive, selectDraggingActive } from "../../../../redux/selectors/derived.selectors";
 
 interface DoubleClickHandlerProps {
   handler: ExplicitAny;
@@ -32,25 +36,17 @@ function DoubleClickHandler({
     movementWithFlip,
     hintSource,
     columns,
-    deckDragging,
-    goalDragging,
-    columnDragging,
-    deckUndoAnim,
-    deckRedoAnim,
-    deckRedoResetAnim
-  } = useSelector(({ Goal, Columns, Deck }: RootReducerState) => ({
-    goalMoveTarget: Goal.doubleClickTarget,
-    columnMoveTarget: Columns.doubleClickTarget,
-    columnMoveCards: Columns.movingCards,
-    columns: Columns.columns,
-    movementWithFlip: Columns.movementWithFlip,
-    hintSource: Goal.hintSource || Columns.hintSource,
-    deckDragging: Deck.cardDragging,
-    goalDragging: Goal.cardDragging,
-    columnDragging: Columns.cardDragging,
-    deckUndoAnim: Deck.startUndoAnimation,
-    deckRedoAnim: Deck.startRedoAnimation,
-    deckRedoResetAnim: Deck.startRedoResetAnimation
+    draggingActive,
+    deckAnimActive
+  } = useSelector((state: RootReducerState) => ({
+    goalMoveTarget: selectGoalDoubleClickTarget(state),
+    columnMoveTarget: selectColumnsDoubleClickTarget(state),
+    columnMoveCards: selectColumnsMovingCards(state),
+    columns: selectColumns(state),
+    movementWithFlip: selectColumnsMovementWithFlip(state),
+    hintSource: (selectGoalHintSource(state) as any) || undefined,
+    draggingActive: selectDraggingActive(state),
+    deckAnimActive: selectDeckAnimActive(state)
   }));
 
   // call the first handler of the double click when the handling move changes to true
@@ -97,13 +93,6 @@ function DoubleClickHandler({
     <>
       {Children.map(children, (child: ExplicitAny) => {
         // Always use single click/tap; guard against drag/animation and duplicate touch+click
-        const draggingActive = Boolean(
-          (deckDragging && deckDragging.length) ||
-          (goalDragging && goalDragging.length) ||
-          (columnDragging && columnDragging.length)
-        );
-        const deckAnimActive = Boolean(deckUndoAnim || deckRedoAnim || deckRedoResetAnim);
-
         const onTapClick = () => {
           if (recentTouch) return; // ignore synthetic click after touch
           if (draggingActive || deckAnimActive) return; // ignore while dragging/animating

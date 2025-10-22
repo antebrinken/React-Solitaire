@@ -8,6 +8,10 @@ import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
 import pageActions from "../../../redux/pages/pages.actions";
 import { useHistory } from "react-router-dom";
 import userActions from "../../../redux/user/user.actions";
+import { selectDeckPile, selectFlippedPile } from "../../../redux/selectors/deck.selectors";
+import { selectColumns } from "../../../redux/selectors/columns.selectors";
+import { selectGoals } from "../../../redux/selectors/goal.selectors";
+import { selectGameMoves } from "../../../redux/selectors/gameBoard.selectors";
 
 function SaveGameButton() {
   const history = useHistory();
@@ -21,14 +25,14 @@ function SaveGameButton() {
     gameTime,
     gameMoves,
     nHints
-  } = useSelector(({ Deck, Columns, Goal, GameBoard }: RootReducerState) => ({
-    deckPile: Deck.deckPile,
-    flippedPile: Deck.flippedPile,
-    columns: Columns.columns,
-    goals: Goal.goals,
-    gameTime: GameBoard.gameTime,
-    gameMoves: GameBoard.gameMoves,
-    nHints: GameBoard.nHints
+  } = useSelector((state: RootReducerState) => ({
+    deckPile: selectDeckPile(state),
+    flippedPile: selectFlippedPile(state),
+    columns: selectColumns(state),
+    goals: selectGoals(state),
+    gameTime: (state.GameBoard as any).gameTime,
+    gameMoves: selectGameMoves(state),
+    nHints: (state.GameBoard as any).nHints
   }));
 
   const showConfimationModal = () => {

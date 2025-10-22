@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import React from "react";
-import { RootReducerState } from "../../../global";
+// import { RootReducerState } from "../../../global";
+import { selectGamePreviousMoves } from "../../../redux/selectors/gameBoard.selectors";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import columnsActions from "../../../redux/columns/columns.actions";
@@ -16,11 +17,7 @@ function UndoButton() {
   const dispatch = useDispatch();
 
   // get gameMoves from redux
-  const { gamePreviousMoves } = useSelector(
-    ({ GameBoard }: RootReducerState) => ({
-      gamePreviousMoves: GameBoard.gamePreviousMoves
-    })
-  );
+  const gamePreviousMoves = useSelector(selectGamePreviousMoves);
 
   const handleUndo = () => {
     const nMoves = gamePreviousMoves.length;

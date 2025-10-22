@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import React from "react";
-import { RootReducerState } from "../../../global";
+// import { RootReducerState } from "../../../global";
+import { selectGameNextMoves } from "../../../redux/selectors/gameBoard.selectors";
 import { StepForwardOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import columnsActions from "../../../redux/columns/columns.actions";
@@ -16,9 +17,7 @@ function RedoButton() {
   const dispatch = useDispatch();
 
   // get gameMoves from redux
-  const { gameNextMoves } = useSelector(({ GameBoard }: RootReducerState) => ({
-    gameNextMoves: GameBoard.gameNextMoves
-  }));
+  const gameNextMoves = useSelector(selectGameNextMoves);
 
   const handleRedo = () => {
     const nMoves = gameNextMoves.length;

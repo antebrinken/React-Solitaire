@@ -5,6 +5,8 @@ import DoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/DoubleCl
 import { DraggableCard } from "../Cards/Cards.items";
 import GoalDoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/GoalDoubleClickHandler";
 import { RootReducerState } from "../../../global";
+import { selectGoalPile } from "../../../redux/selectors/goal.selectors";
+import { selectGameHints } from "../../../redux/selectors/gameBoard.selectors";
 import SimplePile from "./SimplePile.component";
 
 interface GoalPileProps {
@@ -18,16 +20,14 @@ interface GoalPileProps {
 function GoalPile({ goalId, offset }: GoalPileProps) {
   const dispatch = useDispatch();
   // get piles from redux
-  const { goalPile, lastHint } = useSelector(
-    ({ Goal, GameBoard }: RootReducerState) => {
-      const gameHints = GameBoard.gameHints;
-      const lastIndex = gameHints.length - 1;
-      return {
-        goalPile: Goal.goals ? Goal.goals[goalId] : [],
-        lastHint: lastIndex >= 0 ? gameHints[lastIndex] : undefined
-      };
-    }
-  );
+  const { goalPile, lastHint } = useSelector((state: RootReducerState) => {
+    const hints = selectGameHints(state);
+    const lastIndex = hints.length - 1;
+    return {
+      goalPile: selectGoalPile(state, goalId),
+      lastHint: lastIndex >= 0 ? hints[lastIndex] : undefined
+    };
+  });
 
   // renders cards components that can be dragged
   const getCards = () => {

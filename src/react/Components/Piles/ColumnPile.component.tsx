@@ -5,6 +5,7 @@ import { CardType } from "../../../redux/gameBoard/gameBoard.types";
 import ColumDoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/ColumnDoubleClickHandler";
 import DoubleClickHandler from "../CardMoveHandlers/DoubleClickHandlers/DoubleClickHandler.component";
 import { RootReducerState } from "../../../global";
+import { selectLastHint } from "../../../redux/selectors/derived.selectors";
 import SimplePile from "./SimplePile.component";
 
 interface ColumnPileProps {
@@ -19,13 +20,9 @@ interface ColumnPileProps {
 function ColumnPile({ offset, columnCards, columnId }: ColumnPileProps) {
   const dispatch = useDispatch();
 
-  const { lastHint } = useSelector(({ GameBoard }: RootReducerState) => {
-    const gameHints = GameBoard.gameHints;
-    const lastIndex = gameHints.length - 1;
-    return {
-      lastHint: lastIndex >= 0 ? gameHints[lastIndex] : undefined
-    };
-  });
+  const { lastHint } = useSelector((state: RootReducerState) => ({
+    lastHint: selectLastHint(state)
+  }));
 
   // renders cards components accordingly if it is flipped or not
   const getCards = () => {

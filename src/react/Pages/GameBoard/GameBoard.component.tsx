@@ -6,6 +6,17 @@ import {
   GameTopRow
 } from "../../Components/BoardFields/BoardFields.items";
 import { ExplicitAny, RootReducerState } from "../../../global";
+import {
+  selectDeckPileFromGameBoard,
+  selectFlippedPileFromGameBoard,
+  selectGameMoves,
+  selectGameOver,
+  selectGoalsInitial,
+  selectHasSavedGame,
+  selectSavedGame,
+  selectShowingConfirm,
+  selectColumnsInitial
+} from "../../../redux/selectors/gameBoard.selectors";
 import { useIntl } from "react-intl";
 import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,48 +47,19 @@ function GameBoard() {
   const initializedRef = useRef<boolean>(false);
 
   // get all necessary elements from redux
-  const {
-    gameOver,
-    gameMoves,
-    deckPile,
-    flippedPile,
-    column1Pile,
-    column2Pile,
-    column3Pile,
-    column4Pile,
-    column5Pile,
-    column6Pile,
-    column7Pile,
-    goal1Pile,
-    goal2Pile,
-    goal3Pile,
-    goal4Pile,
-    showingConfirm,
-    hasSavedGame,
-    savedGame
-  } = useSelector(({ GameBoard, Goal, User, Pages }: RootReducerState) => ({
-    gameMoves: (GameBoard as ExplicitAny).gameMoves,
-    gameOver: Goal.gameOver,
-    deckPile: (GameBoard as ExplicitAny).deckPile,
-    flippedPile: (GameBoard as ExplicitAny).flippedPile,
-    column1Pile: (GameBoard as ExplicitAny).column1Pile,
-    column2Pile: (GameBoard as ExplicitAny).column2Pile,
-    column3Pile: (GameBoard as ExplicitAny).column3Pile,
-    column4Pile: (GameBoard as ExplicitAny).column4Pile,
-    column5Pile: (GameBoard as ExplicitAny).column5Pile,
-    column6Pile: (GameBoard as ExplicitAny).column6Pile,
-    column7Pile: (GameBoard as ExplicitAny).column7Pile,
-    goal1Pile: (GameBoard as ExplicitAny).goal1Pile,
-    goal2Pile: (GameBoard as ExplicitAny).goal2Pile,
-    goal3Pile: (GameBoard as ExplicitAny).goal3Pile,
-    goal4Pile: (GameBoard as ExplicitAny).goal4Pile,
-    showingConfirm:
-      (GameBoard as ExplicitAny).showingConfirm &&
-      (Pages.confirmationModalProps.message1 !== "" ||
-        Pages.confirmationModalProps.buttonConfirmId),
-    hasSavedGame: User.user.hasSavedGame,
-    savedGame: User.user.savedGame || {}
-  }));
+  const gameMoves = useSelector(selectGameMoves);
+  const gameOver = useSelector(selectGameOver);
+  const deckPile = useSelector(selectDeckPileFromGameBoard);
+  const flippedPile = useSelector(selectFlippedPileFromGameBoard);
+  const columnsInitial = useSelector(selectColumnsInitial);
+  const goalsInitial = useSelector(selectGoalsInitial);
+  const showingConfirm = useSelector((state: RootReducerState) =>
+    selectShowingConfirm(state) &&
+    ((state.Pages.confirmationModalProps.message1 as any) !== "" ||
+      state.Pages.confirmationModalProps.buttonConfirmId !== undefined)
+  );
+  const hasSavedGame = useSelector(selectHasSavedGame);
+  const savedGame = useSelector(selectSavedGame);
 
   // ---------------------------------------------------------
   // Create Game
@@ -114,9 +96,7 @@ function GameBoard() {
       // add game to the user counting
       dispatch(userActions.addGame());
       // set the initial deck
-      dispatch(
-        deckActions.setInitialDeck(savedGame.deckPile, savedGame.flippedPile)
-      );
+      dispatch(deckActions.setInitialDeck(savedGame.deckPile, savedGame.flippedPile));
       // set the initial columns
       dispatch(columnsActions.setInitialColumns(savedGame.columns, true));
       // set the initial goals
@@ -139,26 +119,9 @@ function GameBoard() {
       // set the initial deck
       dispatch(deckActions.setInitialDeck(deckPile, flippedPile));
       // set the initial columns
-      dispatch(
-        columnsActions.setInitialColumns({
-          column1Pile,
-          column2Pile,
-          column3Pile,
-          column4Pile,
-          column5Pile,
-          column6Pile,
-          column7Pile
-        })
-      );
+      dispatch(columnsActions.setInitialColumns(columnsInitial));
       // set the initial goals
-      dispatch(
-        goalActions.setInitialGoals({
-          goal1Pile,
-          goal2Pile,
-          goal3Pile,
-          goal4Pile
-        })
-      );
+      dispatch(goalActions.setInitialGoals(goalsInitial));
       initializedRef.current = true;
     }
   };

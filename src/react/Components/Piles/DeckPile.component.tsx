@@ -6,6 +6,14 @@ import { RootReducerState } from "../../../global";
 import SimplePile from "./SimplePile.component";
 import deckActions from "../../../redux/deck/deck.actions";
 import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
+import {
+  selectDeckPile,
+  selectDeckStartRedoAnimation,
+  selectDeckStartRedoResetAnimation,
+  selectDeckTranslationX,
+  selectDeckTranslationY
+} from "../../../redux/selectors/deck.selectors";
+import { selectLastHint } from "../../../redux/selectors/derived.selectors";
 
 /**
  * Component that consists of a pile (3d) of unflipped cards that can be flipped one by one (with a translation)
@@ -20,19 +28,14 @@ function DeckPile() {
     lastHint,
     startRedoAnimation,
     startRedoResetAnimation
-  } = useSelector(({ Deck, GameBoard }: RootReducerState) => {
-    const gameHints = GameBoard.gameHints;
-    const lastIndex = gameHints.length - 1;
-
-    return {
-      deckPile: Deck.deckPile,
-      translationX: Deck.translationX,
-      translationY: Deck.translationY,
-      lastHint: lastIndex >= 0 ? gameHints[lastIndex] : undefined,
-      startRedoAnimation: Deck.startRedoAnimation,
-      startRedoResetAnimation: Deck.startRedoResetAnimation
-    };
-  });
+  } = useSelector((state: RootReducerState) => ({
+    deckPile: selectDeckPile(state),
+    translationX: selectDeckTranslationX(state),
+    translationY: selectDeckTranslationY(state),
+    lastHint: selectLastHint(state),
+    startRedoAnimation: selectDeckStartRedoAnimation(state),
+    startRedoResetAnimation: selectDeckStartRedoResetAnimation(state)
+  }));
 
   // swap from deck to flipped pile
   const handleDeckSwap = async (cardId: number) => {

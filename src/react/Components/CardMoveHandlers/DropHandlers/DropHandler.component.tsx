@@ -5,6 +5,9 @@ import ColumnDrop from "./ColumnDropHandler";
 import GoalDrop from "./GoalDropHandler";
 import { RootReducerState } from "../../../../global";
 import { useDrop } from "react-dnd";
+import { selectColumnsCardDragging, selectColumnsCardDraggingCol, selectColumnsMovementWithFlip } from "../../../../redux/selectors/columns.selectors";
+import { selectDeckCardDragging } from "../../../../redux/selectors/deck.selectors";
+import { selectGoalCardDragging } from "../../../../redux/selectors/goal.selectors";
 
 interface DropHandlerProps {
   className?: string;
@@ -22,26 +25,26 @@ const DropHandler = ({
   const GoalInstance = new GoalDrop(dispatch);
 
   // get the move object
-  const { move, sendBackColumn, sendBackGoal } = useSelector(
-    ({ Columns, Deck, Goal }: RootReducerState) => {
-      const source =
-        Columns.cardDraggingCol || Goal.cardDraggingGoal || "deckPile";
-      const cards =
-        Columns.cardDragging || Deck.cardDragging || Goal.cardDragging || [];
-      const movementWithFlip = Boolean(Columns.movementWithFlip);
+  const { move, sendBackColumn, sendBackGoal } = useSelector((state: RootReducerState) => {
+    const source = selectColumnsCardDraggingCol(state) || (state.Goal as any).cardDraggingGoal || "deckPile";
+    const cards =
+      selectColumnsCardDragging(state) ||
+      selectDeckCardDragging(state) ||
+      selectGoalCardDragging(state) ||
+      [];
+    const movementWithFlip = Boolean(selectColumnsMovementWithFlip(state));
 
-      return {
-        move: {
-          source,
-          cards: cards as Array<CardType>,
-          movementWithFlip,
-          target: ""
-        },
-        sendBackColumn: Columns.sendBack,
-        sendBackGoal: Goal.sendBack
-      };
-    }
-  );
+    return {
+      move: {
+        source,
+        cards: cards as Array<CardType>,
+        movementWithFlip,
+        target: ""
+      },
+      sendBackColumn: (state.Columns as any).sendBack,
+      sendBackGoal: (state.Goal as any).sendBack
+    };
+  });
 
   // stores the field the card was dropped to
   const [fieldDropedTo, setFieldDropedTo] = useState<string | undefined>(

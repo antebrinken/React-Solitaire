@@ -7,6 +7,10 @@ import goalActions from "../../../redux/goal/goal.actions";
 import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
 import { CardType } from "../../../redux/gameBoard/gameBoard.types";
 import { getValidTarget } from "../../../redux/goal/goal.utils";
+import { selectColumns } from "../../../redux/selectors/columns.selectors";
+import { selectGoals } from "../../../redux/selectors/goal.selectors";
+import { selectDeckPile, selectFlippedPile } from "../../../redux/selectors/deck.selectors";
+import { selectDraggingActive } from "../../../redux/selectors/derived.selectors";
 
 // Small helper to pause between moves for UI smoothness
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -15,27 +19,14 @@ function AutoCompleter() {
   const dispatch = useDispatch();
 
   const { columns, goals, deckPile, flippedPile, gameOver, anyDragging } = useSelector(
-    ({ Columns, Goal, Deck }: RootReducerState) => {
-      const colDragging = Columns.cardDragging || [];
-      const goalDragging = Goal.cardDragging || [];
-      const deckDragging = Deck.cardDragging || [];
-
-      return {
-        columns: Columns.columns,
-        goals: Goal.goals,
-        deckPile: Deck.deckPile,
-        flippedPile: Deck.flippedPile,
-        gameOver: Goal.gameOver,
-        // consider dragging only if there are cards being dragged
-        anyDragging:
-          colDragging.length > 0 ||
-          goalDragging.length > 0 ||
-          deckDragging.length > 0 ||
-          // also pause while any double-click flow is active
-          Boolean(Columns.doubleClickTarget) ||
-          Boolean(Goal.doubleClickTarget)
-      };
-    }
+    (state: RootReducerState) => ({
+      columns: selectColumns(state),
+      goals: selectGoals(state),
+      deckPile: selectDeckPile(state),
+      flippedPile: selectFlippedPile(state),
+      gameOver: state.Goal.gameOver,
+      anyDragging: selectDraggingActive(state)
+    })
   );
 
   // Ensure strong typing for maps

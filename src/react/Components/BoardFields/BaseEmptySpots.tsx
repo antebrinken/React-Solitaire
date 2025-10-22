@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CardSpot } from "../Cards/Cards.items";
 import { RedoOutlined } from "@ant-design/icons";
 import { RootReducerState } from "../../../global";
+import { selectLastHint } from "../../../redux/selectors/derived.selectors";
 import _debounce from "lodash.debounce";
 import deckActions from "../../../redux/deck/deck.actions";
 import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
@@ -14,19 +15,12 @@ import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
 function BaseEmptySpots() {
   const dispatch = useDispatch();
   // get refs from redux
-  const { deckRef, flippedRef, lastHint } = useSelector(
-    ({ Deck, GameBoard }: RootReducerState) => {
-      const gameHints = GameBoard.gameHints;
-      const lastIndex = gameHints.length - 1;
-      return {
-        deckRef:
-          typeof Deck.deckRef === "function" ? Deck.deckRef() : undefined,
-        flippedRef:
-          typeof Deck.flippedRef === "function" ? Deck.flippedRef() : undefined,
-        lastHint: lastIndex >= 0 ? gameHints[lastIndex] : undefined
-      };
-    }
-  );
+  const { deckRef, flippedRef, lastHint } = useSelector((state: RootReducerState) => ({
+    deckRef: typeof state.Deck.deckRef === "function" ? state.Deck.deckRef() : undefined,
+    flippedRef:
+      typeof state.Deck.flippedRef === "function" ? state.Deck.flippedRef() : undefined,
+    lastHint: selectLastHint(state)
+  }));
 
   /**
    * Sets a new translation value for the deck cards to the flipped pile
