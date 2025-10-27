@@ -1,6 +1,7 @@
 import { Col, Row } from "antd";
 import { FormattedMessage } from "react-intl";
 import PageTitle from "../../Components/PageTitle/PageTitle.component";
+import iconUrl from "src/images/icon.png";
 import React from "react";
 
 function AboutPage() {
@@ -11,11 +12,7 @@ function AboutPage() {
         {/* Developer picture */}
         <Col xs={24} sm={24} md={12}>
           <div className="imageHere">
-            <img
-              className="developerImg"
-              src={require("../../../images/icon.png")}
-              alt=""
-            />
+            <img className="developerImg" src={iconUrl} alt="" />
           </div>
         </Col>
         <Col xs={24} sm={24} md={12}>

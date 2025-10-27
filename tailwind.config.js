@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   purge: [
-    './public/index.html',
+    './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
     './src/**/*.less'
   ],
@@ -18,4 +18,3 @@ module.exports = {
   },
   plugins: []
 };
-

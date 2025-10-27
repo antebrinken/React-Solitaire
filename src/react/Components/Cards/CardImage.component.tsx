@@ -19,6 +19,11 @@ function CardImage({
     }
   };
 
+  // Map all images under /src/images to URLs (Vite)
+  const images = import.meta.glob("/src/images/**/*", { eager: true, as: "url" }) as Record<string, string>;
+  const key = `/src/images/${directory}/${image}`;
+  const src = images[key] || images["/src/images/" + directory + "/default.png"];
+
   return (
     <div
       onClick={handleOnClick}
@@ -26,7 +31,7 @@ function CardImage({
     >
       <img
         className="cardImage"
-        src={require(`../../../images/${directory}/${image}`)}
+        src={src as unknown as string}
         alt=""
       />
     </div>

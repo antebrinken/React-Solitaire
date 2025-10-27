@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Layout, Menu } from "antd";
+import iconUrl from "src/images/icon.png";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { RootReducerState } from "../../../../global";
@@ -39,11 +40,7 @@ function Sidebar() {
           title={intl.formatMessage({ id: "sidebar.main" })}
         >
           <div>
-            <img
-              className="logoTitle"
-              src={require("../../../../images/icon.png")}
-              alt=""
-            />
+            <img className="logoTitle" src={iconUrl} alt="" />
           </div>
         </Item>
         {!loggedIn && (

@@ -1,4 +1,5 @@
 import React from "react";
+import iconUrl from "src/images/icon.png";
 
 interface AppIconProps {
   className?: string;
@@ -6,11 +7,7 @@ interface AppIconProps {
 
 function AppIcon({ className = "" }: AppIconProps) {
   return (
-    <img
-      className={className}
-      src={require("../../../images/icon.png")}
-      alt=""
-    />
+    <img className={className} src={iconUrl} alt="" />
   );
 }
 

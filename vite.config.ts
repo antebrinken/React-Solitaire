@@ -11,6 +11,13 @@ export default defineConfig({
       jsxRuntime: 'classic'
     })
   ],
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true
+      }
+    }
+  },
   base: '/react-solitaire/',
   resolve: {
     alias: {
