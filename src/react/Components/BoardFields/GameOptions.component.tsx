@@ -22,7 +22,11 @@ function GameOptions() {
   };
   return (
     <>
-      <Row className="boardMainOptionsRow" align="middle" justify="center">
+      <Row
+        className="boardMainOptionsRow fixed left-0 right-4 bottom-[calc(6px+env(safe-area-inset-bottom,0px))] z-50 px-1 py-1"
+        align="middle"
+        justify="center"
+      >
         <BarDisplay>
           <UndoButton />
           <PauseGameButton />
@@ -35,10 +39,7 @@ function GameOptions() {
             </Tooltip>
           ) : (
             <Tooltip title={<FormattedMessage id="btn.showMore" />}>
-              <UpCircleFilled
-                className="joyrideShowMore iconButton"
-                onClick={handleShowMore}
-              />
+              <UpCircleFilled className="iconButton" onClick={handleShowMore} />
             </Tooltip>
           )}
           <HintButton />
@@ -47,7 +48,11 @@ function GameOptions() {
       </Row>
 
       {showMore ? (
-        <Row className="boardMenuOptionsRow" align="middle" justify="center">
+        <Row
+          className="boardMenuOptionsRow fixed left-0 right-4 bottom-[88px] z-50 px-1 py-1"
+          align="middle"
+          justify="center"
+        >
           <BarDisplay>
             <RestartGameButton />
             <NewGameButton />

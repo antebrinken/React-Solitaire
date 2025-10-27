@@ -13,14 +13,8 @@ const ErrorPage = React.lazy(() =>
 const GameBoard = React.lazy(() =>
   import("../../../Pages/GameBoard/GameBoard.component")
 );
-const LoginPage = React.lazy(() =>
-  import("../../../Pages/LoginPage/LoginPage.component")
-);
 const ScoresPage = React.lazy(() =>
   import("../../../Pages/ScoresPage/ScoresPage.component")
-);
-const SignUpPage = React.lazy(() =>
-  import("../../../Pages/SignUpPage/SignUpPage.component")
 );
 const StatisticsPage = React.lazy(() =>
   import("../../../Pages/StatisticsPage/StatisticsPage.component")
@@ -41,16 +35,6 @@ function ApplicationRouter() {
       <Route exact path={`${url}/`}>
         <Suspense fallback={<div>Loading...</div>}>
           <GameBoard />
-        </Suspense>
-      </Route>
-      <Route exact path={`${url}/login`}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <LoginPage />
-        </Suspense>
-      </Route>
-      <Route exact path={`${url}/signUp`}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <SignUpPage />
         </Suspense>
       </Route>
       {/* Game Play Page */}

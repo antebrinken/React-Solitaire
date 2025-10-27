@@ -24,26 +24,17 @@ function StatisticsPage() {
   // Joyride removed
 
   return (
-    <div className="joyrideStatisticsPage mainPage statisticsPage">
+    <div className="mainPage statisticsPage flex flex-col">
       <PageTitle title={<FormattedMessage id="sidebar.statistics" />} />
       {carouselDisplay ? (
         <>
-          <CarouselDisplay
-            ref={carouselRef}
-            className="joyrideStatisticsCarousel"
-          />
-          <AppstoreFilled
-            className="joyrideDashboardDisplay toggleButton"
-            onClick={() => setCarouselDisplay(false)}
-          />
+          <CarouselDisplay ref={carouselRef} />
+          <AppstoreFilled className="toggleButton fixed bottom-5 right-10 transition" onClick={() => setCarouselDisplay(false)} />
         </>
       ) : (
         <>
           <DashboardDisplay />
-          <BorderOutlined
-            className="toggleButton"
-            onClick={() => setCarouselDisplay(true)}
-          />
+          <BorderOutlined className="toggleButton fixed bottom-5 right-10 transition" onClick={() => setCarouselDisplay(true)} />
         </>
       )}
     </div>

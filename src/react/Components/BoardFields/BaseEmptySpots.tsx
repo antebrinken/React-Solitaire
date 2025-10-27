@@ -74,10 +74,14 @@ function BaseEmptySpots() {
     lastHint && lastHint.source === "deckPile" && lastHint.target === undefined;
 
   return (
-    <div className="baseEmptySpots" id="baseEmptySpots">
-      <Row gutter={{ xs: 0, sm: 6, md: 8 }} className="boardDeckRow" align="middle">
+    <div className="baseEmptySpots absolute inset-x-0 min-h-[140vh]" id="baseEmptySpots">
+      <Row
+        gutter={{ xs: 0, sm: 6, md: 8 }}
+        className="boardDeckRow md:my-[2%] md:h-[200px] h-[88px]"
+        align="middle"
+      >
         {/* Deck and Flipped piles */}
-        <CardSpot ref={deckRef} offset={2} className="joyrideDeck deckCardSpot">
+        <CardSpot ref={deckRef} offset={2} className="deckCardSpot">
           {/* Button to reset deck */}
           <Button
             className={`redoDeckButton ${shake ? "shakeAnimationButton" : ""}`}
@@ -88,11 +92,7 @@ function BaseEmptySpots() {
         </CardSpot>
         <CardSpot ref={flippedRef} />
         {/* Goal Spots */}
-        <CardSpot
-          offset={3}
-          className="goalSpot joyrideGoals"
-          cardContainerColumns="goalSpotContainer"
-        />
+        <CardSpot offset={3} className="goalSpot" cardContainerColumns="goalSpotContainer" />
         <CardSpot
           className="goalSpot"
           cardContainerColumns="goalSpotContainer"
@@ -106,9 +106,9 @@ function BaseEmptySpots() {
           cardContainerColumns="goalSpotContainer"
         />
       </Row>
-      <Row gutter={{ xs: 0, sm: 6, md: 8 }} align="middle" className="joyrideColumns">
+      <Row gutter={{ xs: 0, sm: 6, md: 8 }} align="middle" className="columnsRow mt-1">
         {/* Game Columns */}
-        <CardSpot offset={2} className="joyrideDoubleClick" />
+        <CardSpot offset={2} />
         <CardSpot />
         <CardSpot />
         <CardSpot />

@@ -42,13 +42,13 @@ function ScoresPage({ activeTab }: ScoresPageProps) {
   };
 
   return (
-    <div className="joyrideScoresPage mainPage scoresPage">
+    <div className="mainPage scoresPage flex flex-col">
       <PageTitle title={<FormattedMessage id="sidebar.scores" />} />
 
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
         <TabPane
           tab={
-            <Text ellipsis className="joyrideScoresUser">
+            <Text ellipsis>
               <FormattedMessage id="sidebar.userHighScores" />
             </Text>
           }
@@ -58,7 +58,7 @@ function ScoresPage({ activeTab }: ScoresPageProps) {
         </TabPane>
         <TabPane
           tab={
-            <Text ellipsis className="joyrideScoresTop">
+            <Text ellipsis>
               <FormattedMessage id="sidebar.top10HighScores" />
             </Text>
           }

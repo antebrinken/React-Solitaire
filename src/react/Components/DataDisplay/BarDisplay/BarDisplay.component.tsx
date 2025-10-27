@@ -6,7 +6,7 @@ function BarDisplay({ children }: PropsWithChildren<{}>) {
   }
 
   return (
-    <div className="joyrideInfoDisplay barDisplayContainer">
+    <div className="barDisplayContainer flex z-[100]">
       {(children as Array<object>).map((Child: ReactNode, index: number) => (
         <div key={`barDisplay_${index}`} className="barDisplay">
           {Child}

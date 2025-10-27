@@ -1,6 +1,5 @@
 import {
   BarChartOutlined,
-  LoginOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   OrderedListOutlined,
@@ -24,6 +23,7 @@ function Sidebar() {
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(true);
 
+  // Login is removed; keep selector but don't render login-specific UI
   const { loggedIn } = useSelector(({ User }: RootReducerState) => ({
     loggedIn: User.loggedIn
   }));
@@ -43,16 +43,7 @@ function Sidebar() {
             <img className="logoTitle" src={iconUrl} alt="" />
           </div>
         </Item>
-        {!loggedIn && (
-          <Item
-            onClick={() => history.push("/login")}
-            key="2"
-            title={intl.formatMessage({ id: "sidebar.login" })}
-          >
-            <LoginOutlined />
-            {!collapsed && <FormattedMessage id="sidebar.login" />}
-          </Item>
-        )}
+        {/* Login removed for offline/local-only mode */}
         <Item
           onClick={() => history.push("/scores")}
           key="3"

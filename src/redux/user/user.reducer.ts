@@ -33,16 +33,9 @@ export interface InitialUser {
     };
     settings: {
       language: string;
-      joyride: {
-        main: boolean;
-        scores: boolean;
-        statistics: boolean;
-        game: boolean;
-        gameOptions: boolean;
-      };
+      // Joyride removed from settings
     };
   };
-  userRef: ExplicitAny;
   loggedIn: boolean | undefined;
 }
 
@@ -63,17 +56,9 @@ const INITIAL_USER: InitialUser = {
       moves: {}
     },
     settings: {
-      language: "en-US",
-      joyride: {
-        main: true,
-        scores: true,
-        statistics: true,
-        game: true,
-        gameOptions: true
-      }
+      language: "en-US"
     }
   },
-  userRef: undefined,
   loggedIn: undefined
 };
 
@@ -91,47 +76,20 @@ const userReducer = (state = INITIAL_USER, action: ActionsCreators) => {
         loggedIn: false
       };
 
-    case UserActionTypes.SAVE_USER:
-      return {
-        user: action.user,
-        userRef: () => {
-          return action.userRef;
-        },
-        loggedIn: true
-      };
-
     case UserActionTypes.CHANGE_USER_SETTINGS:
-      if (state.userRef) {
-        // add to firebase
-        state.userRef().set({
-          ...state.user,
-          ...action.changes
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineUser",
-          JSON.stringify({ ...state.user, ...action.changes })
-        );
-      }
+      localStorage.setItem(
+        "offlineUser",
+        JSON.stringify({ ...state.user, ...action.changes })
+      );
 
       return { ...state, user: { ...state.user, ...action.changes } };
 
     case UserActionTypes.ADD_GAME:
       const finalGames = state.user.nGames + 1;
-      if (state.userRef) {
-        // add to firebase
-        state.userRef().set({
-          ...state.user,
-          nGames: finalGames
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineUser",
-          JSON.stringify({ ...state.user, nGames: finalGames })
-        );
-      }
+      localStorage.setItem(
+        "offlineUser",
+        JSON.stringify({ ...state.user, nGames: finalGames })
+      );
 
       return { ...state, user: { ...state.user, nGames: finalGames } };
 
@@ -167,40 +125,21 @@ const userReducer = (state = INITIAL_USER, action: ActionsCreators) => {
         graphs: finalGraph
       };
       // handle highscore!
-      if (state.userRef) {
-        // add to firebase
-        state.userRef().set({
-          ...state.user,
-          ...finalChanges
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineUser",
-          JSON.stringify({ ...state.user, ...finalChanges })
-        );
-      }
+      localStorage.setItem(
+        "offlineUser",
+        JSON.stringify({ ...state.user, ...finalChanges })
+      );
       return { ...state, user: { ...state.user, ...finalChanges } };
 
     case UserActionTypes.SAVE_GAME:
-      if (state.userRef) {
-        // add to firebase
-        state.userRef().set({
+      localStorage.setItem(
+        "offlineUser",
+        JSON.stringify({
           ...state.user,
           savedGame: action.savedGame,
           hasSavedGame: true
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineUser",
-          JSON.stringify({
-            ...state.user,
-            savedGame: action.savedGame,
-            hasSavedGame: true
-          })
-        );
-      }
+        })
+      );
 
       return {
         ...state,
@@ -208,37 +147,21 @@ const userReducer = (state = INITIAL_USER, action: ActionsCreators) => {
       };
 
     case UserActionTypes.CLEAR_SAVED_GAME:
-      if (state.userRef) {
-        // add to firebase
-        state.userRef().set({
+      localStorage.setItem(
+        "offlineUser",
+        JSON.stringify({
           ...state.user,
           savedGame: {},
           hasSavedGame: false
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineUser",
-          JSON.stringify({
-            ...state.user,
-            savedGame: {},
-            hasSavedGame: false
-          })
-        );
-      }
+        })
+      );
       return {
         ...state,
         user: { ...state.user, savedGame: {}, hasSavedGame: false }
-      };    case UserActionTypes.CLEAR_USER:
-      return INITIAL_USER;
-
-    case UserActionTypes.RESET_USER_REF:
-      return {
-        ...state,
-        userRef: () => {
-          return action.userRef;
-        }
       };
+
+    case UserActionTypes.CLEAR_USER:
+      return INITIAL_USER;
 
     // ********************************************************
 

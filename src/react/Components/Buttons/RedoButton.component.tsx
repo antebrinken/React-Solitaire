@@ -105,7 +105,7 @@ function RedoButton() {
   return (
     <Tooltip title={<FormattedMessage id="btn.redo" />}>
       <StepForwardOutlined
-        className={`joyrideRedo iconButton ${
+        className={`iconButton ${
           gameNextMoves.length === 0 ? "iconButtonDisabled" : ""
         }`}
         onClick={handleRedo}

@@ -158,7 +158,7 @@ function GameBoard() {
       <GameOverModal />
       {showingConfirm ? <ConfirmationModal /> : null}
       <DropHandler
-        className={`joyrideGamePage mainPage ${
+        className={`gamePage mainPage min-h-screen overflow-x-hidden overflow-y-auto ${
           showingConfirm ? "blurBackground" : ""
         }`}
       >

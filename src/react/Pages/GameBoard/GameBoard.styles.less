@@ -1,6 +1,6 @@
 // ----------------------------------
 // CustomDragLayer
-.joyrideGamePage {
+.gamePage {
   // Make this the single scroll container for the game
   overflow-x: hidden !important;
   overflow-y: auto !important;
@@ -35,7 +35,7 @@
 
 // Support portrait without rotating the whole game (small phones)
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
-  .joyrideGamePage {
+  .gamePage {
     width: 100vw;
     height: auto !important;
     position: relative;
@@ -49,7 +49,7 @@
 }
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
-  .joyrideGamePage {
+  .gamePage {
     background: @primaryColor;
     height: auto !important;
     min-height: 100vh !important;
@@ -114,7 +114,7 @@
     min-height: 130vh;
     background: @primaryColor;
     height: 100%;
-    .joyrideColumns {
+  .columnsRow {
       margin-top: 1%;
       padding-bottom: 0;
     }
@@ -124,7 +124,7 @@
 // ----------------------------------
 // Desktop behavior
 @media screen and (min-width: 768px) {
-  .joyrideGamePage {
+  .gamePage {
     // Allow content and columns to extend and scroll under the help bar
     height: auto !important;
     // Start a bit taller to avoid sudden scrollbar appearance

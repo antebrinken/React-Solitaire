@@ -39,10 +39,7 @@ function ExitGameButton() {
   return (
     <>
       <Tooltip title={<FormattedMessage id="btn.exitGame" />}>
-        <CloseOutlined
-          className="joyrideExit iconButton"
-          onClick={handleShowConfirm}
-        />
+        <CloseOutlined className="iconButton" onClick={handleShowConfirm} />
       </Tooltip>
     </>
   );

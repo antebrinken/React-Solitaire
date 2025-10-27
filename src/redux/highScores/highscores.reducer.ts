@@ -13,27 +13,17 @@ export interface InitialHighScores {
     highScores: Array<HighScore>;
     hasNewHighScore: boolean;
   };
-  highscoreRef: ExplicitAny;
 }
 
 const INITIAL_HIGHSCORE: InitialHighScores = {
   highScore: {
     highScores: [],
     hasNewHighScore: false
-  },
-  highscoreRef: undefined
+  }
 };
 
 const userReducer = (state = INITIAL_HIGHSCORE, action: ActionsCreators) => {
   switch (action.type) {
-    case HighScoresActionTypes.SET_ONLINE_HIGHSCORES:
-      return {
-        highScore: action.data,
-        highScoreRef: () => {
-          return action.highScoreRef;
-        }
-      };
-
     case HighScoresActionTypes.SET_OFFLINE_HIGHSCORES:
       const currentLocal = localStorage.getItem("offlineHighScores");
       const offlineHighScores = currentLocal
@@ -49,8 +39,7 @@ const userReducer = (state = INITIAL_HIGHSCORE, action: ActionsCreators) => {
         return {
           highScore: {
             ...offlineHighScores
-          },
-          highScoreRef: undefined
+          }
         };
       }
       return {
@@ -111,31 +100,14 @@ const userReducer = (state = INITIAL_HIGHSCORE, action: ActionsCreators) => {
         return a.finalScore < b.finalScore ? -1 : 1;
       });
 
-      if (typeof state.highscoreRef === "function") {
-        // add to firebase
-        state.highscoreRef().set({
-          ...state.highScore,
-          highScores: finalHighScores
-        });
-      } else {
-        // add to localStorage
-        localStorage.setItem(
-          "offlineHighScores",
-          JSON.stringify({ ...state.highScore, highScores: finalHighScores })
-        );
-      }
+      localStorage.setItem(
+        "offlineHighScores",
+        JSON.stringify({ ...state.highScore, highScores: finalHighScores })
+      );
 
       return {
         ...state,
         highScore: { highScores: finalHighScores, hasNewHighScore: false }
-      };
-
-    case HighScoresActionTypes.RESET_HIGHSCORES_REF:
-      return {
-        ...state,
-        highscoreRef: () => {
-          return action.highScoreRef;
-        }
       };
 
     // ********************************************************

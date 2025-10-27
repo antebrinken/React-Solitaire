@@ -26,22 +26,20 @@ function ConfigurationsForm() {
         email: user.email,
         createdAt: user.createdAt,
         language: user.settings?.language,
-        joyride: user.settings?.joyride || {},
         loggedIn: User.loggedIn
       };
     }
   );
 
   const onChange = (value: any) => {
-    const { userName, language, joyride } = userConfigs;
+    const { userName, language } = userConfigs;
 
     form.setFieldsValue(value);
 
     let finalChanges = {
       userName,
       settings: {
-        language,
-        joyride
+        language
       }
     };
 
@@ -52,14 +50,6 @@ function ConfigurationsForm() {
       finalChanges = {
         ...finalChanges,
         settings: { ...finalChanges.settings, ...value }
-      };
-    } else {
-      finalChanges = {
-        ...finalChanges,
-        settings: {
-          ...finalChanges.settings,
-          joyride: { ...joyride, ...value }
-        }
       };
     }
     dispatch(userActions.changeUserSettings(finalChanges));
@@ -76,15 +66,7 @@ function ConfigurationsForm() {
       <Row className="buttonSpaceRow" align="middle" justify="space-between">
         <Col xs={24} sm={24} md={10}>
           {/* Username input item */}
-          <Item
-            name="userName"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({ id: "form.required.userName" })
-              }
-            ]}
-          >
+          <Item name="userName" rules={[{ required: true, message: "Required" }]}>
             <Input
               className="divButton loginButtonAnimated formInput"
               defaultValue={userConfigs.userName}
@@ -167,22 +149,7 @@ function ConfigurationsForm() {
         </Col>
       </Row>
 
-      <Divider orientation="left" className="extraSpaceDivider">
-        <FormattedMessage id="joyride.title" />
-      </Divider>
-      {/* Joyride checkboxes for each page */}
-      <Row className="buttonSpaceRow" align="middle" justify="center">
-        {Object.keys(userConfigs.joyride).map((page: string) => (
-          <Col key={page} xs={24} sm={24} md={6}>
-            <Checkbox
-              checked={userConfigs.joyride[page]}
-              onChange={e => onChange({ [page]: e.target.checked })}
-            >
-              <FormattedMessage id={`sidebar.${page}`} />
-            </Checkbox>
-          </Col>
-        ))}
-      </Row>
+      {/* Joyride removed */}
     </Form>
   );
 }

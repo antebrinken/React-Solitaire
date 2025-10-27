@@ -71,10 +71,7 @@ function SaveGameButton() {
   return (
     <>
       <Tooltip title={<FormattedMessage id="btn.saveGame" />}>
-        <SaveFilled
-          className="joyrideSave iconButton"
-          onClick={showConfimationModal}
-        />
+        <SaveFilled className="iconButton" onClick={showConfimationModal} />
       </Tooltip>
     </>
   );

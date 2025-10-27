@@ -5,7 +5,7 @@ import React from "react";
 
 function ConfigurationsPage() {
   return (
-    <div className="joyrideStartingPage mainPage">
+    <div className="mainPage">
       <PageTitle title={<FormattedMessage id="sidebar.configurations" />} />
       <ConfigurationsForm />
     </div>

@@ -1,13 +1,6 @@
 // ----------------------------------
 // Base Empty Spots
-.baseEmptySpots {
-  position: absolute;
-  left: 0;
-  right: 0;
-  // Provide extra vertical space so a scrollbar exists from the start
-  // This avoids sudden layout shifts when columns grow tall
-  min-height: 140vh;
-}
+.baseEmptySpots {}
 
 .deckCardSpot {
   display: flex;
@@ -28,7 +21,7 @@
   transform: scale(1.5);
 }
 
-.joyrideColumns {
+.columnsRow {
   padding-bottom: 15%;
 }
 
@@ -63,24 +56,9 @@
 
 // ----------------------------------
 // Game Options
-.boardMainOptionsRow {
-  background-color: @primaryColor;
-  padding: 20px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  // Ensure options bar stays clickable above card stacks
-  z-index: 50;
-}
+.boardMainOptionsRow { background-color: @primaryColor; }
 
-.boardMenuOptionsRow {
-  padding: 20px;
-  position: absolute;
-  bottom: 60px;
-  width: 100%;
-  // Keep secondary bar above columns too
-  z-index: 50;
-}
+.boardMenuOptionsRow {}
 
 // ----------------------------------
 // Game Play Info
@@ -119,12 +97,10 @@
     z-index: 50;
   }
 
-  .boardDeckRow {
-    height: 88px;
-  }
+  .boardDeckRow {}
 
   // Align empty column borders with actual piles
-  .joyrideColumns {
+  .columnsRow {
     margin-top: 1%;
     padding-bottom: 0;
   }

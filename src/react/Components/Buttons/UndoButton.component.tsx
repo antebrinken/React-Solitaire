@@ -116,7 +116,7 @@ function UndoButton() {
   return (
     <Tooltip title={<FormattedMessage id="btn.undo" />}>
       <StepBackwardOutlined
-        className={`joyrideUndo iconButton ${
+        className={`iconButton ${
           gamePreviousMoves.length === 0 ? "iconButtonDisabled" : ""
         }`}
         onClick={handleUndo}

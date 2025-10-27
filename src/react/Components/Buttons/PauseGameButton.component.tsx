@@ -32,7 +32,7 @@ function PauseGameButton() {
   return (
     <Tooltip title={<FormattedMessage id="btn.pause" />}>
       <PauseOutlined
-        className="joyridePause iconButton"
+        className="iconButton"
         onClick={handleShowConfirm}
       />
     </Tooltip>

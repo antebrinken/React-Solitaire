@@ -3,12 +3,6 @@ import HighScoresActionTypes from "./highscores.types";
 
 // ********************************************************
 
-const setOnlineHighScores = (data: ExplicitAny, highScoreRef: ExplicitAny) => ({
-  type: HighScoresActionTypes.SET_ONLINE_HIGHSCORES,
-  data,
-  highScoreRef
-});
-
 const setOfflineHighScores = () => ({
   type: HighScoresActionTypes.SET_OFFLINE_HIGHSCORES
 });
@@ -24,19 +18,12 @@ const addHighScore = (userName: string, finalScore: number) => ({
   finalScore
 });
 
-const resetHighscoresRef = (highScoreRef: ExplicitAny) => ({
-  type: HighScoresActionTypes.RESET_HIGHSCORES_REF,
-  highScoreRef
-});
-
 // ********************************************************
 
 const actionsCreators = Object.freeze({
-  setOnlineHighScores,
   setOfflineHighScores,
   hasNewHighScore,
-  addHighScore,
-  resetHighscoresRef
+  addHighScore
 });
 
 export type ActionsCreators = ReturnType<ValueOf<typeof actionsCreators>>;
