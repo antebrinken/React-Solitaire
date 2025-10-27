@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { auth, getUserInfo } from "../../../firebase/firebase.utils";
 import { ExplicitAny } from "../../../global";
 import { IntlShape } from "react-intl";
 import highscoreActions from "../../../redux/highScores/highscores.actions";
@@ -72,81 +71,10 @@ export const checkConfirmPassword = (
 };
 
 export const setUserRedux = async (
-  user: ExplicitAny,
-  dispatch: ExplicitAny,
-  loggedIn = false,
-  userName?: string,
-  language?: string
+  _user: ExplicitAny,
+  dispatch: ExplicitAny
 ) => {
-  if (loggedIn) {
-    auth.onAuthStateChanged(async oldUser => {
-      if (oldUser) {
-        const { userRef, highscoreRef }: ExplicitAny = await getUserInfo(
-          oldUser
-        );
-        dispatch(userActions.resetUserRef(userRef));
-        dispatch(highscoreActions.resetHighscoresRef(highscoreRef));
-      }
-    });
-  } else {
-    const { userRef, highscoreRef }: ExplicitAny = await getUserInfo(user, {
-      userName,
-      language
-    });
-
-    if (userRef && highscoreRef) {
-      userRef?.onSnapshot((snapshot: ExplicitAny) => {
-        const {
-          createdAt,
-          graphs,
-          hasSavedGame,
-          savedGame,
-          history,
-          maxMoves,
-          maxTime,
-          nGames,
-          settings,
-          userName,
-          email
-        } = snapshot.data();
-        dispatch(
-          userActions.saveUser(
-            {
-              createdAt,
-              graphs,
-              hasSavedGame,
-              savedGame,
-              history,
-              maxMoves,
-              maxTime,
-              nGames,
-              settings,
-              userName,
-              email
-            },
-            userRef
-          )
-        );
-      });
-
-      highscoreRef?.onSnapshot((snapshot: ExplicitAny) => {
-        const { hasNewHighScore, highScores } = snapshot.data();
-        dispatch(
-          highscoreActions.setOnlineHighScores(
-            {
-              hasNewHighScore,
-              highScores
-            },
-            highscoreRef
-          )
-        );
-      });
-    }
-
-    // if not, make offline user and highscore
-    else {
-      dispatch(userActions.getLocalStorage());
-      dispatch(highscoreActions.setOfflineHighScores());
-    }
-  }
+  // Firebase removed; initialize local/offline user and highscores
+  dispatch(userActions.getLocalStorage());
+  dispatch(highscoreActions.setOfflineHighScores());
 };

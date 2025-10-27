@@ -4,11 +4,9 @@ import { Tabs, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import HighScoresTable from "../../Components/Table/HighScoresTable.component";
-import JoyrideSteps from "./JoyrideSteps.component";
 import PageTitle from "../../Components/PageTitle/PageTitle.component";
 import { RootReducerState } from "../../../global";
 import UserScoresTable from "../../Components/Table/UserScoresTable.component";
-import joyrideActions from "../../../redux/joyride/joyride.actions";
 import { useHistory } from "react-router-dom";
 
 const { TabPane } = Tabs;
@@ -29,16 +27,7 @@ function ScoresPage({ activeTab }: ScoresPageProps) {
     })
   );
 
-  /**
-   * Triggered at mount
-   * Starts the joyride
-   */
-  const initJoyride = () => {
-    dispatch(
-      joyrideActions.initJoyride("scores", JoyrideSteps({ loggedIn: Boolean(loggedIn) }))
-    );
-  };
-  useEffect(initJoyride, []);
+  // Joyride removed
 
   // @todo remove url here, use normal tab component
   const handleTabChange = (tabKey: string) => {

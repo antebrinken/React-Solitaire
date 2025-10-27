@@ -5,14 +5,12 @@ import BarDisplay from "../DataDisplay/BarDisplay/BarDisplay.component";
 import ExitGameButton from "../Buttons/ExitGameButton.component";
 import { FormattedMessage } from "react-intl";
 import HintButton from "../Buttons/HintButton.component";
-import JoyrideSteps from "./GameOptionsJoyrideSteps.component";
 import NewGameButton from "../Buttons/NewGameButton.component";
 import PauseGameButton from "../Buttons/PauseGameButton.component";
 import RedoButton from "../Buttons/RedoButton.component";
 import RestartGameButton from "../Buttons/RestartGameButton.component";
 import SaveGameButton from "../Buttons/SaveGameButton.component";
 import UndoButton from "../Buttons/UndoButton.component";
-import joyrideActions from "../../../redux/joyride/joyride.actions";
 import { useDispatch } from "react-redux";
 
 /* Will be the game options - to be developed */
@@ -21,7 +19,6 @@ function GameOptions() {
   const [showMore, setShowMore] = useState(false);
   const handleShowMore = () => {
     setShowMore(true);
-    dispatch(joyrideActions.initJoyride("gameOptions", JoyrideSteps()));
   };
   return (
     <>

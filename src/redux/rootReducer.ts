@@ -4,7 +4,6 @@ import deckReducer from "./deck/deck.reducer";
 import gameBoardReducer from "./gameBoard/gameBoard.reducer";
 import goalReducer from "./goal/goal.reducer";
 import highscoreReducer from "./highScores/highscores.reducer";
-import joyrideReducer from "./joyride/joyride.reducer";
 import pagesReducer from "./pages/pages.reducer";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -18,7 +17,7 @@ export const rootReducer = {
   Pages: pagesReducer,
   User: userReducer,
   HighScores: highscoreReducer,
-  Joyride: joyrideReducer
+  
 };
 
 const persistConfig = {

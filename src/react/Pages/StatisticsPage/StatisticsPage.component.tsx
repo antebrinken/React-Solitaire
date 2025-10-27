@@ -4,9 +4,7 @@ import CarouselDisplay from "../../Components/Graphs/CarouselDisplay/CarouselDis
 import DashboardDisplay from "../../Components/Graphs/DashboardDisplay/DashboardDisplay.component";
 import { ExplicitAny } from "../../../global";
 import { FormattedMessage } from "react-intl";
-import JoyrideSteps from "./JoyrideSteps.component";
 import PageTitle from "../../Components/PageTitle/PageTitle.component";
-import joyrideActions from "../../../redux/joyride/joyride.actions";
 import { useDispatch } from "react-redux";
 
 function StatisticsPage() {
@@ -23,12 +21,7 @@ function StatisticsPage() {
     }
   };
 
-  const initJoyride = () => {
-    dispatch(
-      joyrideActions.initJoyride("statistics", JoyrideSteps(), handleCarousel)
-    );
-  };
-  useEffect(initJoyride, []);
+  // Joyride removed
 
   return (
     <div className="joyrideStatisticsPage mainPage statisticsPage">

@@ -25,14 +25,12 @@ import { useLocation } from "react-router-dom";
 import ConfirmationModal from "../../Components/Modals/ConfirmationModal.component";
 import DropHandler from "../../Components/CardMoveHandlers/DropHandlers/DropHandler.component";
 import GameOverModal from "../../Components/Modals/GameOverModal.component";
-import JoyrideSteps from "./JoyrideSteps.component";
 import AutoCompleter from "../../Components/AutoCompleter/AutoCompleter.component";
 import { Prompt } from "react-router";
 import columnsActions from "../../../redux/columns/columns.actions";
 import deckActions from "../../../redux/deck/deck.actions";
 import gameBoardActions from "../../../redux/gameBoard/gameBoard.actions";
 import goalActions from "../../../redux/goal/goal.actions";
-import joyrideActions from "../../../redux/joyride/joyride.actions";
 import pageActions from "../../../redux/pages/pages.actions";
 import userActions from "../../../redux/user/user.actions";
 
@@ -79,8 +77,7 @@ function GameBoard() {
     // set this refs at the redux
     dispatch(deckActions.setRefs(deckRef, flippedRef));
 
-    // start joyride
-    dispatch(joyrideActions.initJoyride("game", JoyrideSteps()));
+    // Joyride removed
 
     // if nothing was sent through the location state, then create a new game
     if (!location.state) {

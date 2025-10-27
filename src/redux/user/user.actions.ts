@@ -37,10 +37,6 @@ const clearSavedGame = () => ({
   type: UserActionTypes.CLEAR_SAVED_GAME
 });
 
-const setJoyride = (joyride: ExplicitAny) => ({
-  type: UserActionTypes.SET_JOYRIDE,
-  joyride
-});
 
 const clearUser = () => ({
   type: UserActionTypes.CLEAR_USER
@@ -61,7 +57,6 @@ const actionsCreators = Object.freeze({
   gameOver,
   saveGame,
   clearSavedGame,
-  setJoyride,
   clearUser,
   resetUserRef
 });

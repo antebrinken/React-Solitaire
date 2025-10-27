@@ -1,7 +1,6 @@
 import { ExplicitAny, RootReducerState } from "../../../../global";
 import { Form, Input, Row, notification } from "antd";
 import { FormattedMessage, useIntl } from "react-intl";
-import { auth, signInWithGoogle } from "../../../../firebase/firebase.utils";
 import { checkEmail, setUserRedux } from "../helper";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleCircleFilled } from "@ant-design/icons";
@@ -31,40 +30,17 @@ function LoginForm() {
   };
 
   const handleSignInWithGoogle = async () => {
+    // Firebase removed; fall back to local user
     dispatch(userActions.clearUser());
-    await signInWithGoogle()
-      .then(({ user }) => {
-        setUserRedux(user, dispatch, false, undefined, language);
-        history.push("/");
-      })
-      .catch(signInError => {
-        notification.error({
-          message: `Login Error: ${signInError.message}`,
-          duration: 5
-        });
-
-        dispatch(userActions.getLocalStorage());
-        dispatch(highscoreActions.setOfflineHighScores());
-      });
+    await setUserRedux(undefined, dispatch);
+    history.push("/");
   };
 
   const onSubmit = async (values: Record<string, string>) => {
     dispatch(userActions.clearUser());
-    await auth
-      .signInWithEmailAndPassword(values.email, values.password)
-      .then(({ user }) => {
-        setUserRedux(user, dispatch);
-        history.push("/");
-      })
-      .catch(signInError => {
-        notification.error({
-          message: `Login Error: ${signInError.message}`,
-          duration: 5
-        });
-
-        dispatch(userActions.getLocalStorage());
-        dispatch(highscoreActions.setOfflineHighScores());
-      });
+    // Firebase removed; fall back to local user
+    await setUserRedux(undefined, dispatch);
+    history.push("/");
   };
 
   const [form] = Form.useForm();

@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import MenuButton from "../../Buttons/MenuButton.component";
 import PasswordInput from "../PasswordInput.component";
 import React from "react";
-import { auth } from "../../../../firebase/firebase.utils";
 import { useHistory } from "react-router-dom";
 import userActions from "../../../../redux/user/user.actions";
 
@@ -37,19 +36,9 @@ function SignUpForm() {
 
   const onSubmit = async (values: Record<string, string>) => {
     dispatch(userActions.clearUser());
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        values.email,
-        values.password
-      );
-      setUserRedux(user, dispatch, false, values.userName, language);
-      history.push("/");
-    } catch (signUpError) {
-      notification.error({
-        message: `Sign Up Error: ${signUpError.message}`,
-        duration: 5
-      });
-    }
+    // Firebase removed; create/update local user profile fields and initialize offline
+    await setUserRedux(undefined, dispatch);
+    history.push("/");
   };
 
   return (
